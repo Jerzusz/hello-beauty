@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Sandra",
+    "work_days": [1, 2, 3, 4, 5, 6],
+    "work_start": "09:00",
+    "work_end": "18:00"
+  },
+  {
+    "id": 2,
+    "name": "Nikola",
+    "work_days": [1, 2, 3, 4, 5, 6],
+    "work_start": "09:00",
+    "work_end": "18:00"
+  }
+]

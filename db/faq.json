@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "question": "Ile trwa zabieg przedłużania włosów?",
+    "answer": "Czas zabiegu zależy od wybranej metody i ilości aplikowanych pasm. Zazwyczaj trwa od 3 do 6 godzin. Metodą keratynową aplikacja 150 pasm zajmuje około 4–5 godzin, tape-in przy 40–60 taśmach – 2–3 godziny."
+  },
+  {
+    "id": 2,
+    "question": "Jak długo utrzymują się przedłużone włosy?",
+    "answer": "Metoda keratynowa: 4–6 miesięcy, po czym wymagana jest korekta lub przepięcie. Tape-in: 6–8 tygodni do ponownego zapięcia. Mikro-ring: 3–4 miesiące. Na trwałość wpływa pielęgnacja oraz szybkość wzrostu naturalnych włosów."
+  },
+  {
+    "id": 3,
+    "question": "Czy przedłużanie niszczy naturalne włosy?",
+    "answer": "Przy prawidłowej aplikacji przez certyfikowanego specjalistę i właściwej pielęgnacji przedłużanie nie niszczy włosów. Kluczowe jest stosowanie odpowiednich produktów bezsiarczanowych oraz regularne wizyty kontrolne."
+  },
+  {
+    "id": 4,
+    "question": "Jak dbać o przedłużone włosy?",
+    "answer": "Używaj szamponów i odżywek bezsiarczanowych. Nie noś włosów w mokrym koku. Rozczesuj od dołu, unikając ciągnięcia przy łącznikach. Unikaj wysokiej temperatury bezpośrednio przy łącznikach. Śpij z warkoczem lub luźnym kucykiem."
+  },
+  {
+    "id": 5,
+    "question": "Czy mogę farbować przedłużone włosy?",
+    "answer": "Włosy Remy można delikatnie tonować specjalnymi farby do włosów syntetycznych i naturalnych. Nie zalecamy rozjaśniania – może to uszkodzić strukturę włosów. Najlepiej farbować przed aplikacją lub skonsultować się ze stylistką."
+  }
+]

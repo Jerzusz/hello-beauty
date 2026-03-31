@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ – Hello Beauty Studio</title>
+  <meta name="description" content="Często zadawane pytania o przedłużaniu włosów w Hello Beauty Studio. Wszystko co musisz wiedzieć przed wizytą." />
+  <meta property="og:title" content="FAQ – Hello Beauty Studio" />
+  <meta property="og:description" content="Odpowiedzi na najczęstsze pytania o przedłużaniu włosów." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 80px 0 100px;
+    }
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color .3s;
+    }
+    .faq-item.open {
+      border-color: rgba(192,192,192,.2);
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+      user-select: none;
+      transition: background .2s;
+    }
+    .faq-question:hover {
+      background: rgba(255,255,255,.03);
+    }
+    .faq-question-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(192,192,192,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: rgba(192,192,192,.7);
+      font-size: .9rem;
+      transition: transform .3s, background .3s;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: rgba(192,192,192,.1);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease, padding .35s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 600px;
+    }
+    .faq-answer-inner {
+      padding: 0 24px 20px;
+      font-size: .87rem;
+      color: rgba(255,255,255,.55);
+      line-height: 1.8;
+      border-top: 1px solid rgba(255,255,255,.05);
+      padding-top: 16px;
+    }
+    .faq-empty {
+      text-align: center;
+      color: rgba(255,255,255,.3);
+      font-size: .85rem;
+      padding: 60px 20px;
+    }
+    .faq-loading {
+      text-align: center;
+      color: rgba(255,255,255,.25);
+      font-size: .82rem;
+      padding: 60px 20px;
+    }
+    .faq-cta {
+      max-width: 760px;
+      margin: 48px auto 0;
+      text-align: center;
+      padding: 32px;
+      background: rgba(192,192,192,.04);
+      border: 1px solid rgba(192,192,192,.12);
+      border-radius: 16px;
+    }
+    .faq-cta h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .faq-cta p {
+      font-size: .82rem;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ NAWIGACJA ═══════════ -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">✦ Hello Beauty Studio</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="uslugi.html"      class="nav-link" data-page="uslugi.html">Usługi &amp; Cennik</a></li>
+        <li><a href="kalkulator.html"  class="nav-link" data-page="kalkulator.html">Kalkulator</a></li>
+        <li><a href="rezerwacja.html"  class="nav-link" data-page="rezerwacja.html">Rezerwacja</a></li>
+        <li><a href="portfolio.html"   class="nav-link" data-page="portfolio.html">Portfolio</a></li>
+        <li><a href="faq.html"         class="nav-link active" data-page="faq.html">FAQ</a></li>
+        <li><a href="index.html#kontakt" class="nav-link">Kontakt</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════ PAGE HERO ═══════════ -->
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <p class="page-hero-eyebrow">Pytania i odpowiedzi</p>
+      <h1 class="page-hero-title">FAQ</h1>
+      <p class="page-hero-desc">Najczęściej zadawane pytania dotyczące przedłużania i zagęszczania włosów.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ FAQ ═══════════ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-list" id="faqList">
+        <div class="faq-loading">Ładowanie pytań...</div>
+      </div>
+      <div class="faq-cta">
+        <h3>Nie znalazłaś odpowiedzi?</h3>
+        <p>Napisz do nas lub zarezerwuj bezpłatną konsultację, a odpowiemy na każde pytanie.</p>
+        <a href="rezerwacja.html" class="btn btn-gold">Zarezerwuj konsultację</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ KONTAKT ═══════════ -->
+  <section class="section section-dark" id="kontakt">
+    <div class="container">
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">✦ Hello Beauty Studio</div>
+      <p class="footer-copy" id="footer-copy"></p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/faq.js"></script>
+</body>
+</html>

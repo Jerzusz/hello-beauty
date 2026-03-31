@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rezerwacja – Hello Beauty Studio</title>
+  <meta name="description" content="Zarezerwuj wizytę online w Hello Beauty Studio. Wybierz termin, usługę i pracownika – szybka rezerwacja w kilku krokach." />
+  <meta property="og:title" content="Rezerwacja online – Hello Beauty Studio" />
+  <meta property="og:description" content="Zarezerwuj wizytę u fryzjera online. Szybko i wygodnie." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ═══════════ NAWIGACJA ═══════════ -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">✦ Hello Beauty Studio</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="uslugi.html"      class="nav-link" data-page="uslugi.html">Usługi &amp; Cennik</a></li>
+        <li><a href="kalkulator.html"  class="nav-link" data-page="kalkulator.html">Kalkulator</a></li>
+        <li><a href="rezerwacja.html"  class="nav-link" data-page="rezerwacja.html">Rezerwacja</a></li>
+        <li><a href="portfolio.html"   class="nav-link" data-page="portfolio.html">Portfolio</a></li>
+        <li><a href="faq.html"         class="nav-link" data-page="faq.html">FAQ</a></li>
+        <li><a href="index.html#kontakt" class="nav-link">Kontakt</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════ PAGE HERO ═══════════ -->
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <p class="page-hero-eyebrow">Terminy</p>
+      <h1 class="page-hero-title">Zarezerwuj wizytę</h1>
+      <p class="page-hero-desc">Wybierz wygodny dzień z kalendarza, a następnie godzinę i uzupełnij swoje dane.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ REZERWACJA ═══════════ -->
+  <section class="section section-dark" id="rezerwacja">
+    <div class="container">
+      <div class="booking-layout">
+        <!-- Kalendarz -->
+        <div class="booking-calendar">
+          <div class="calendar-nav">
+            <button class="cal-nav-btn" id="prevMonth">&#8249;</button>
+            <h3 class="cal-month-title" id="calMonthTitle">Ładowanie...</h3>
+            <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
+          </div>
+          <div class="calendar-legend">
+            <span class="legend-dot dot-available"></span> Wolny
+            <span class="legend-dot dot-limited"></span> Ostatnie miejsca
+            <span class="legend-dot dot-full"></span> Zajęty
+            <span class="legend-dot dot-closed"></span> Zamknięte
+          </div>
+          <div class="calendar-grid" id="calendarGrid">
+            <div class="cal-day-header">Pon</div>
+            <div class="cal-day-header">Wt</div>
+            <div class="cal-day-header">Śr</div>
+            <div class="cal-day-header">Czw</div>
+            <div class="cal-day-header">Pt</div>
+            <div class="cal-day-header">Sob</div>
+            <div class="cal-day-header">Nd</div>
+          </div>
+        </div>
+
+        <!-- Sloty + formularz -->
+        <div class="booking-form-panel">
+
+          <!-- Krok 1 – wybór usługi -->
+          <div class="booking-step-section">
+            <h4 class="booking-step-title"><span class="step-num">1</span> Wybierz usługę</h4>
+            <div class="form-group">
+              <select name="service" id="serviceSelect">
+                <option value="">– wybierz usługę –</option>
+              </select>
+            </div>
+            <div class="form-group" id="variantGroup" style="display:none;">
+              <label>Wariant</label>
+              <select id="variantSelect">
+                <option value="">– wybierz wariant –</option>
+              </select>
+            </div>
+            <div class="service-info-box" id="serviceInfo" style="display:none;"></div>
+          </div>
+
+          <!-- Krok 2 – godziny (pojawia się po kliknięciu dnia) -->
+          <div class="time-slots-section" id="timeSlotsSection" style="display:none;">
+            <h4 class="booking-step-title"><span class="step-num">2</span> Wybierz godzinę – <span id="selectedDateDisplay"></span></h4>
+            <div class="time-slots" id="timeSlots"></div>
+          </div>
+
+          <div class="booking-placeholder" id="bookingPlaceholder">
+            <div class="placeholder-icon">📅</div>
+            <p>Wybierz usługę, a następnie dzień z kalendarza, aby zobaczyć dostępne godziny.</p>
+          </div>
+
+          <!-- Krok 3 – dane klienta -->
+          <form class="booking-form" id="bookingForm" style="display:none;" novalidate>
+            <h4 class="booking-step-title"><span class="step-num">3</span> Uzupełnij dane</h4>
+            <div class="form-group">
+              <label>Imię *</label>
+              <input type="text" name="client_name" placeholder="Anna" required />
+            </div>
+            <div class="form-group">
+              <label>Telefon *</label>
+              <input type="tel" name="client_phone" placeholder="+48 000 000 000" required />
+            </div>
+            <div class="form-group">
+              <label>Uwagi (opcjonalnie)</label>
+              <textarea name="notes" rows="3" placeholder="Dodatkowe informacje, życzenia..."></textarea>
+            </div>
+            <div class="form-selected-info" id="formSelectedInfo"></div>
+            <button type="submit" class="btn btn-gold btn-full" id="submitBtn">Potwierdź rezerwację</button>
+          </form>
+
+          <div class="booking-success" id="bookingSuccess" style="display:none;">
+            <div class="success-icon">✓</div>
+            <h4>Rezerwacja złożona!</h4>
+            <p id="successMessage"></p>
+            <button class="btn btn-gold" id="newBookingBtn">Zarezerwuj kolejny termin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ KONTAKT ═══════════ -->
+  <section class="section" id="kontakt">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Znajdź nas</p>
+        <h2 class="section-title">Kontakt</h2>
+      </div>
+      <div class="contact-layout">
+        <div class="contact-info">
+          <div class="contact-card">
+            <div class="contact-icon">📍</div>
+            <div><h4>Adres</h4><p>Wojkowice<br />woj. śląskie</p></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">📞</div>
+            <div><h4>Telefon</h4><p><a href="tel:573312722">573 312 722</a></p></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <div><h4>E-mail</h4><p><a href="mailto:kontakt@hellobeautystudio.pl">kontakt@hellobeautystudio.pl</a></p></div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">🕐</div>
+            <div><h4>Godziny otwarcia</h4><p>Pon – Sob: 9:00 – 18:00<br />Niedziela: zamknięte</p></div>
+          </div>
+          <div class="contact-socials">
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">Facebook</a>
+          </div>
+        </div>
+        <div class="contact-map-placeholder">
+          <iframe src="https://maps.google.com/maps?q=Hello+Beauty+Studio+Wojkowice&output=embed" width="100%" height="320" style="border:0;border-radius:12px;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ STOPKA ═══════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">✦ Hello Beauty Studio</div>
+      <p class="footer-copy">© 2026 Hello Beauty Studio. Wszelkie prawa zastrzeżone.</p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/booking.js"></script>
+  <script src="js/calendar.js"></script>
+</body>
+</html>

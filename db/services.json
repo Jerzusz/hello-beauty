@@ -1,0 +1,438 @@
+[
+  {
+    "id": 1,
+    "name": "Ściąganie włosów do 100 gr",
+    "description": "Profesjonalne i bezpieczne usięganie łączeń keratynowych lub taśm do 100 g włosów. Bez uszkodzenia włosów naturalnych.",
+    "category": "sciaganie",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 100,
+    "price_to": 100,
+    "duration_minutes": 40,
+    "variants": []
+  },
+  {
+    "id": 2,
+    "name": "Ściąganie włosów powyżej 100 gr",
+    "description": "Profesjonalne usięganie dużych ilości łączeń powyżej 100 g. Delikatna procedura zapewniająca pełną ochronę włosów naturalnych.",
+    "category": "sciaganie",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 150,
+    "price_to": 150,
+    "duration_minutes": 60,
+    "variants": []
+  },
+  {
+    "id": 3,
+    "name": "Rozczesywanie kołtunów",
+    "description": "50 zł / 30 minut",
+    "category": "sciaganie",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 50,
+    "price_to": 50,
+    "duration_minutes": 30,
+    "variants": []
+  },
+  {
+    "id": 4,
+    "name": "Przerobienie włosów klientki",
+    "description": "2 zł / 1 gr – wycena indywidualna, płatne z dołu",
+    "category": "sciaganie",
+    "workers": ["Nikola"],
+    "price_from": 0,
+    "price_to": 0,
+    "duration_minutes": 60,
+    "variants": []  
+  },
+  {
+    "id": 5,
+    "name": "Rozjaśnianie włosów dziewiczych",
+    "description": "Wycena indywidualna",
+    "category": "koloryzacja",
+    "workers": ["Sandra"],
+    "price_from": 350,
+    "price_to": 600,
+    "duration_minutes": 120,
+    "variants": []
+  },
+  {
+    "id": 6,
+    "name": "Korekta micro łączenia keratynowe (0,2–0,3 gr)",
+    "description": "Korekta najcienniejszych łączeń keratynowych micro. Miniaturowe złączki są niewidoczne i idealne do cienkich włosów.",
+    "category": "keratyna_korekta",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 750,
+    "price_to": 1200,
+    "duration_minutes": 180,
+    "variants": [
+      { "label": "do 50 gr", "price": 750, "duration_minutes": 180 },
+      { "label": "do 100 gr", "price": 900, "duration_minutes": 240 },
+      { "label": "do 150 gr", "price": 1000, "duration_minutes": 270 },
+      { "label": "powyżej 150 gr", "price": 1200, "duration_minutes": 300 }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Korekta nano łączenia keratynowe (0,4–0,5 gr)",
+    "description": "Korekta łączeń keratynowych nano – kompromis między wielkością a uczepem. Świetna opcja dla większości typów włosów.",
+    "category": "keratyna_korekta",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 600,
+    "price_to": 750,
+    "duration_minutes": 150,
+    "variants": [
+      { "label": "do 50 gr", "price": 600, "duration_minutes": 150 },
+      { "label": "do 100 gr", "price": 650, "duration_minutes": 180 },
+      { "label": "do 150 gr", "price": 700, "duration_minutes": 210 },
+      { "label": "powyżej 150 gr", "price": 750, "duration_minutes": 240 }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Korekta mini łączenia keratynowe (0,6–0,8 gr)",
+    "description": "Korekta większych, mini łączeń keratynowych. Doskonała do zagęszczania włosów normalnych i grubszych.",
+    "category": "keratyna_korekta",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 500,
+    "price_to": 650,
+    "duration_minutes": 120,
+    "variants": [
+      { "label": "do 50 gr", "price": 500, "duration_minutes": 120 },
+      { "label": "do 100 gr", "price": 550, "duration_minutes": 150 },
+      { "label": "do 150 gr", "price": 600, "duration_minutes": 180 },
+      { "label": "powyżej 150 gr", "price": 650, "duration_minutes": 210 }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Korekta micro + nano keratyna (3 rzędy micro – reszta nano)",
+    "description": "Hybrydowa korekta łącząca 3 rzędy micro (przy nasadzie) z nano (pozostałe). Optymalne rozmieszczenie dla naturalnego efektu.",
+    "category": "keratyna_korekta",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 680,
+    "price_to": 830,
+    "duration_minutes": 180,
+    "variants": [
+      { "label": "do 50 gr", "price": 680, "duration_minutes": 180 },
+      { "label": "do 100 gr", "price": 730, "duration_minutes": 210 },
+      { "label": "do 150 gr", "price": 780, "duration_minutes": 240 },
+      { "label": "powyżej 150 gr", "price": 830, "duration_minutes": 270 }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Założenie włosów – micro łączenia keratynowe (0,2–0,3 gr)",
+    "description": "Przedłużanie metodą keratynową z użyciem najcienniejszych spoin micro. Idealne dla delikatnych i cienkich włosów.",
+    "category": "keratyna_zalozenie",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 650,
+    "price_to": 1100,
+    "duration_minutes": 150,
+    "variants": [
+      { "label": "do 50 gr", "price": 650, "duration_minutes": 150 },
+      { "label": "do 100 gr", "price": 800, "duration_minutes": 210 },
+      { "label": "do 150 gr", "price": 900, "duration_minutes": 240 },
+      { "label": "powyżej 150 gr", "price": 1100, "duration_minutes": 270 }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Założenie włosów – nano łączenia keratynowe (0,4–0,5 gr)",
+    "description": "Classyczne przedłużanie keratynowe metodq nano. Trwałe, dyskretne łączenia idealne do włosów normalnej grubości.",
+    "category": "keratyna_zalozenie",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 500,
+    "price_to": 650,
+    "duration_minutes": 120,
+    "variants": [
+      { "label": "do 50 gr", "price": 500, "duration_minutes": 120 },
+      { "label": "do 100 gr", "price": 550, "duration_minutes": 150 },
+      { "label": "do 150 gr", "price": 600, "duration_minutes": 180 },
+      { "label": "powyżej 150 gr", "price": 650, "duration_minutes": 210 }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Założenie włosów – mini łączenia keratynowe (0,6–0,8 gr)",
+    "description": "Przedłużanie za pomocą większych spoin mini. Polecane dla włosów normalnych i grubych, dające znaczący skok objętości.",
+    "category": "keratyna_zalozenie",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 400,
+    "price_to": 550,
+    "duration_minutes": 90,
+    "variants": [
+      { "label": "do 50 gr", "price": 400, "duration_minutes": 90 },
+      { "label": "do 100 gr", "price": 450, "duration_minutes": 120 },
+      { "label": "do 150 gr", "price": 500, "duration_minutes": 150 },
+      { "label": "powyżej 150 gr", "price": 550, "duration_minutes": 180 }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Założenie włosów – micro + nano keratyna",
+    "description": "Hybrydowe założenie łączące micro przy linii włosów z nano w pozostałych strefach. Maksymalnie naturalny efekt.",
+    "category": "keratyna_zalozenie",
+    "workers": ["Sandra", "Nikola"],
+    "price_from": 580,
+    "price_to": 730,
+    "duration_minutes": 150,
+    "variants": [
+      { "label": "do 50 gr", "price": 580, "duration_minutes": 150 },
+      { "label": "do 100 gr", "price": 630, "duration_minutes": 180 },
+      { "label": "do 150 gr", "price": 680, "duration_minutes": 210 },
+      { "label": "powyżej 150 gr", "price": 730, "duration_minutes": 240 }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Korekta Bio Tape",
+    "description": "Korekta taśm Bio Tape – przełożenie i oczyszczenie taśm klejowych. Zachowuje naturalne włosy i przedłużane pasę.",
+    "category": "biotape",
+    "workers": ["Sandra"],
+    "price_from": 150,
+    "price_to": 850,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "1 taśma długa", "price": 150, "duration_minutes": 60 },
+      { "label": "2 × taśmy krótkie", "price": 300, "duration_minutes": 60 },
+      { "label": "3 taśmy", "price": 450, "duration_minutes": 90 },
+      { "label": "4 taśmy", "price": 550, "duration_minutes": 90 },
+      { "label": "8 taśm", "price": 850, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Założenie włosów na Bio Tape",
+    "description": "Przerobienie włosów + założenie",
+    "category": "biotape",
+    "workers": ["Sandra"],
+    "price_from": 250,
+    "price_to": 1000,
+    "duration_minutes": 30,
+    "variants": [
+      { "label": "1 taśma długa", "price": 250, "duration_minutes": 30 },
+      { "label": "2 × taśmy krótkie", "price": 400, "duration_minutes": 30 },
+      { "label": "3 taśmy", "price": 600, "duration_minutes": 60 },
+      { "label": "4 taśmy", "price": 700, "duration_minutes": 60 },
+      { "label": "8 taśm", "price": 1000, "duration_minutes": 60 }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Koloryzacja podstawowa (1 kolor)",
+    "description": "Jednolita koloryzacja włosów jednym odcieniem. La Biosthetique lub Schwarzkopf Professional – pełne pokrycie siwizny i intensywny kolor.",
+    "category": "koloryzacja",
+    "workers": ["Nikola"],
+    "price_from": 210,
+    "price_to": 400,
+    "duration_minutes": 120,
+    "variants": [
+      { "label": "do ramion", "price": 210, "duration_minutes": 120 },
+      { "label": "do łopatek", "price": 270, "duration_minutes": 150 },
+      { "label": "do połowy pleców", "price": 320, "duration_minutes": 180 },
+      { "label": "do pasa", "price": 400, "duration_minutes": 180 }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Rozjaśnianie odrostu + toner",
+    "description": "Roz jaśnianie odrostu z tonowaniem końcowym. Efekt: jednolita jasność od nasady i piękny, chłodny lub ciepły odcień według życzeń.",
+    "category": "koloryzacja",
+    "workers": ["Sandra"],
+    "price_from": 280,
+    "price_to": 480,
+    "duration_minutes": 150,
+    "variants": [
+      { "label": "do ramion", "price": 280, "duration_minutes": 150 },
+      { "label": "do łopatek", "price": 320, "duration_minutes": 150 },
+      { "label": "do połowy pleców", "price": 370, "duration_minutes": 180 },
+      { "label": "do pasa", "price": 480, "duration_minutes": 180 }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Pasemka",
+    "description": "Klasyczne pasemka owijane w folię lub papier. Różne techniki: balayage, highlights, ombre – każda w cenie zależnej od długości.",
+    "category": "koloryzacja",
+    "workers": ["Sandra"],
+    "price_from": 300,
+    "price_to": 450,
+    "duration_minutes": 180,
+    "variants": [
+      { "label": "do ramion", "price": 300, "duration_minutes": 180 },
+      { "label": "do łopatek", "price": 350, "duration_minutes": 210 },
+      { "label": "do połowy pleców", "price": 400, "duration_minutes": 240 },
+      { "label": "do pasa", "price": 450, "duration_minutes": 270 }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Air Touch",
+    "description": "Nowoczesna technika roz jaśniania strumieniem powietrza. Efekt: ultranaturalne, miękkie przejścia kolorów bez wyraźnej linii. Odświeżenie co 3–6 miesięcy.",
+    "category": "koloryzacja",
+    "workers": ["Sandra"],
+    "price_from": 750,
+    "price_to": 1000,
+    "duration_minutes": 360,
+    "variants": [
+      { "label": "do ramion", "price": 750, "duration_minutes": 360 },
+      { "label": "do łopatek", "price": 850, "duration_minutes": 480 },
+      { "label": "do połowy pleców", "price": 950, "duration_minutes": 540 },
+      { "label": "do pasa", "price": 1000, "duration_minutes": 540 }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Pasemka korona głowy + linia włosów",
+    "description": "Roz jaśnianie jedynie napowierzchniowych włosów na koronie i linii czołowej. Szybka metoda na efekt światło-cień bez pełnego roz jaśniania.",
+    "category": "koloryzacja",
+    "workers": ["Sandra"],
+    "price_from": 180,
+    "price_to": 290,
+    "duration_minutes": 90,
+    "variants": [
+      { "label": "do ramion", "price": 180, "duration_minutes": 90 },
+      { "label": "do łopatek", "price": 210, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 260, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 290, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Tonowanie włosów (naturalne + przedłużane)",
+    "description": "Tonowanie kwaśnym lub alkalicznym tonerem. Nada konkretny odcień jasnym włosom i przedłużanym pasmom – spójny kolor na całej długości.",
+    "category": "koloryzacja",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 200,
+    "price_to": 320,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 200, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 240, "duration_minutes": 60 },
+      { "label": "do połowy pleców", "price": 280, "duration_minutes": 90 },
+      { "label": "do pasa", "price": 320, "duration_minutes": 90 }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Peeling skóry głowy (dodatek do usługi)",
+    "description": "Peeling skóry głowy jako dodatek do innej usługi",
+    "category": "pielegnacja",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 60,
+    "price_to": 60,
+    "duration_minutes": 60,
+    "variants": []
+  },
+  {
+    "id": 23,
+    "name": "Peeling skóry głowy + ampułka na porost włosów",
+    "description": "Kompleksowy zabieg: peeling mechaniczny skóry głowy + ampułka stymulująca wzrost. Pobudza mikroukrwienie i odżywianie cebulek.",
+    "category": "pielegnacja",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 200,
+    "price_to": 260,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 200, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 220, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 240, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 260, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Intensywna regeneracja włosów",
+    "description": "Głęboka kuracja odbudowująca struk turę włosa. Zaawansowane preparaty zamykają łuski i przywracają elastyczność przesuszonym lub zniszczonym pasmom.",
+    "category": "pielegnacja",
+    "workers": ["Nikola"],
+    "price_from": 160,
+    "price_to": 260,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 160, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 200, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 240, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 260, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Ekspresowy botox regenerujący",
+    "description": "Ekspresowy zabieg botox do włosów: wygładza, nawilża i odbudowuje od środka. Efekt natychmiastowego połysku i gładkości.",
+    "category": "pielegnacja",
+    "workers": ["Nikola"],
+    "price_from": 210,
+    "price_to": 270,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 210, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 230, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 250, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 270, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Laminacja włosów z nawilżeniem",
+    "description": "Laminacja włosów z intensywnym nawilżeniem. Tworzy ochronną powłokę, wygładza strzępki i nadaje luster ny połysk przez tygodnie.",
+    "category": "pielegnacja",
+    "workers": ["Nikola"],
+    "price_from": 160,
+    "price_to": 210,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 160, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 175, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 190, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 210, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Kuracja regenerująca z ampułką",
+    "description": "Indywidualnie dobrana kuracja regenerująca z skoncentrowaną ampułką keratynową lub nawilżającą. Idealna po zabiegu farbowania lub przedłużania.",
+    "category": "pielegnacja",
+    "workers": ["Nikola"],
+    "price_from": 230,
+    "price_to": 300,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "do ramion", "price": 230, "duration_minutes": 60 },
+      { "label": "do łopatek", "price": 250, "duration_minutes": 90 },
+      { "label": "do połowy pleców", "price": 270, "duration_minutes": 120 },
+      { "label": "do pasa", "price": 300, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Założenie włosów Tape On",
+    "description": "Przedłużanie metodą Tape On – taśmy jedno- lub dwustronne nakładane na naturalne włosy. Szybki montaż, łatwa korekta, lekki i płaski efekt.",
+    "category": "tapeon",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 200,
+    "price_to": 600,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "5 kanapek", "price": 200, "duration_minutes": 60 },
+      { "label": "10 kanapek", "price": 300, "duration_minutes": 90 },
+      { "label": "20 kanapek", "price": 450, "duration_minutes": 120 },
+      { "label": "30 kanapek", "price": 600, "duration_minutes": 120 }
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Korekta Tape On",
+    "description": "Korekta taśm Tape On – oczyszczenie, przesu nięcie i ponowne nałożenie taśm. Przedłuża żywotn osć kompletu taśm o kolejne miesiące.",
+    "category": "tapeon",
+    "workers": ["Nikola", "Sandra"],
+    "price_from": 250,
+    "price_to": 650,
+    "duration_minutes": 60,
+    "variants": [
+      { "label": "5 kanapek", "price": 250, "duration_minutes": 60 },
+      { "label": "10 kanapek", "price": 350, "duration_minutes": 90 },
+      { "label": "20 kanapek", "price": 500, "duration_minutes": 120 },
+      { "label": "30 kanapek", "price": 650, "duration_minutes": 120 }
+    ]
+  }
+]

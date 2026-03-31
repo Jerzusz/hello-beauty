@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator ceny – Hello Beauty Studio</title>
+  <meta name="description" content="Sprawdź orientacyjną cenę przedłużania włosów. Kalkulator cen Hello Beauty Studio – wybierz metodę i długość włosów." />
+  <meta property="og:title" content="Kalkulator ceny – Hello Beauty Studio" />
+  <meta property="og:description" content="Orientacyjna wycena przedłużania włosów online." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Kalkulator ── */
+    .calc-section {
+      padding: 80px 0 100px;
+    }
+    .calc-intro {
+      max-width: 640px;
+      margin: 0 auto 56px;
+      text-align: center;
+    }
+    .calc-disclaimer {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(192,192,192,.07);
+      border: 1px solid rgba(192,192,192,.2);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 24px;
+      text-align: left;
+    }
+    .calc-disclaimer-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .calc-disclaimer p {
+      font-size: .8rem;
+      color: rgba(255,255,255,.55);
+      line-height: 1.6;
+    }
+    .calc-disclaimer strong {
+      color: rgba(255,255,255,.75);
+    }
+
+    /* Steps */
+    .calc-steps {
+      max-width: 840px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .calc-step {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+      padding: 28px 32px;
+      transition: border-color .3s;
+    }
+    .calc-step.active {
+      border-color: rgba(192,192,192,.25);
+    }
+    .calc-step-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .calc-step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(192,192,192,.1);
+      border: 1px solid rgba(192,192,192,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 600;
+      color: #c0c0c0;
+      flex-shrink: 0;
+    }
+    .calc-step-num.done {
+      background: rgba(76,175,103,.15);
+      border-color: rgba(76,175,103,.4);
+      color: #4caf67;
+    }
+    .calc-step-label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #fff;
+    }
+    .calc-step-sub {
+      font-size: .75rem;
+      color: rgba(255,255,255,.35);
+      margin-top: 2px;
+    }
+
+    /* Opcje */
+    .calc-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .calc-option {
+      padding: 11px 22px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.6);
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .25s;
+      letter-spacing: .03em;
+    }
+    .calc-option:hover {
+      border-color: rgba(192,192,192,.35);
+      color: #fff;
+      background: rgba(192,192,192,.07);
+    }
+    .calc-option.selected {
+      background: rgba(192,192,192,.12);
+      border-color: #c0c0c0;
+      color: #e8e8e8;
+    }
+    .calc-option.method-highlight.selected {
+      background: rgba(192,192,192,.15);
+      border-color: #e8e8e8;
+    }
+
+    /* Keratynowa info box */
+    .keratynowa-info {
+      display: none;
+      margin-top: 20px;
+      background: rgba(192,192,192,.06);
+      border-left: 3px solid rgba(192,192,192,.4);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+    }
+    .keratynowa-info.visible { display: block; }
+    .keratynowa-info p {
+      font-size: .82rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.7;
+    }
+    .keratynowa-info strong {
+      color: rgba(255,255,255,.85);
+      display: block;
+      margin-bottom: 4px;
+      font-size: .78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    /* Wynik */
+    .calc-result {
+      display: none;
+      max-width: 840px;
+      margin: 36px auto 0;
+      background: rgba(192,192,192,.05);
+      border: 1px solid rgba(192,192,192,.2);
+      border-radius: 16px;
+      padding: 36px 40px;
+      text-align: center;
+    }
+    .calc-result.visible { display: block; }
+    .calc-result-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      margin-bottom: 10px;
+    }
+    .calc-result-price {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3.2rem;
+      font-weight: 500;
+      color: #e8e8e8;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .calc-result-price span {
+      font-size: 1.6rem;
+      color: rgba(255,255,255,.5);
+      vertical-align: middle;
+    }
+    .calc-result-summary {
+      font-size: .8rem;
+      color: rgba(255,255,255,.45);
+      margin-bottom: 20px;
+    }
+    .calc-result-note {
+      font-size: .76rem;
+      color: rgba(255,255,255,.35);
+      line-height: 1.6;
+      padding: 12px 20px;
+      background: rgba(255,255,255,.03);
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .calc-result-note strong { color: rgba(255,255,255,.5); }
+    .calc-result-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .calc-reset {
+      display: inline-block;
+      padding: 10px 24px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 4px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      cursor: pointer;
+      background: transparent;
+      transition: all .25s;
+    }
+    .calc-reset:hover { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.7); }
+
+    .calc-no-price {
+      display: none;
+      max-width: 840px;
+      margin: 20px auto 0;
+      text-align: center;
+      font-size: .82rem;
+      color: rgba(255,255,255,.35);
+      padding: 20px;
+      background: rgba(255,255,255,.02);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+    .calc-no-price.visible { display: block; }
+
+    @media (max-width: 600px) {
+      .calc-step { padding: 20px; }
+      .calc-result { padding: 24px 20px; }
+      .calc-result-price { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ NAWIGACJA ═══════════ -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">✦ Hello Beauty Studio</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="uslugi.html"      class="nav-link" data-page="uslugi.html">Usługi &amp; Cennik</a></li>
+        <li><a href="kalkulator.html"  class="nav-link active" data-page="kalkulator.html">Kalkulator</a></li>
+        <li><a href="rezerwacja.html"  class="nav-link" data-page="rezerwacja.html">Rezerwacja</a></li>
+        <li><a href="portfolio.html"   class="nav-link" data-page="portfolio.html">Portfolio</a></li>
+        <li><a href="faq.html"         class="nav-link" data-page="faq.html">FAQ</a></li>
+        <li><a href="index.html#kontakt" class="nav-link">Kontakt</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════ PAGE HERO ═══════════ -->
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <p class="page-hero-eyebrow">Wycena</p>
+      <h1 class="page-hero-title">Kalkulator ceny</h1>
+      <p class="page-hero-desc">Dobierz parametry i sprawdź orientacyjną cenę przedłużania lub zagęszczania włosów.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ KALKULATOR ═══════════ -->
+  <section class="calc-section">
+    <div class="container">
+
+      <div class="calc-intro">
+        <div class="calc-disclaimer">
+          <span class="calc-disclaimer-icon">ℹ️</span>
+          <p><strong>Cena orientacyjna.</strong> Wynik kalkulatora to szacunkowa wycena – ostateczna kwota może być niższa lub wyższa w zależności od stanu i grubości Twoich włosów, ilości pasm oraz indywidualnej konsultacji z naszą stylistką.</p>
+        </div>
+      </div>
+
+      <!-- Kroki -->
+      <div class="calc-steps" id="calcSteps">
+
+        <!-- Krok 1: Długość -->
+        <div class="calc-step active" id="step-length">
+          <div class="calc-step-header">
+            <div class="calc-step-num" id="step-num-1">1</div>
+            <div>
+              <div class="calc-step-label">Długość włosów</div>
+              <div class="calc-step-sub">Wybierz obecną długość swoich włosów</div>
+            </div>
+          </div>
+          <div class="calc-options" id="lengthOptions">
+            <div class="loading-placeholder" style="color:rgba(255,255,255,.3);font-size:.82rem;">Ładowanie...</div>
+          </div>
+        </div>
+
+        <!-- Krok 2: Zagęszczenie -->
+        <div class="calc-step" id="step-density">
+          <div class="calc-step-header">
+            <div class="calc-step-num" id="step-num-2">2</div>
+            <div>
+              <div class="calc-step-label">Zagęszczenie</div>
+              <div class="calc-step-sub">Wybierz pożądany stopień zagęszczenia</div>
+            </div>
+          </div>
+          <div class="calc-options" id="densityOptions">
+            <div class="loading-placeholder" style="color:rgba(255,255,255,.3);font-size:.82rem;">Ładowanie...</div>
+          </div>
+        </div>
+
+        <!-- Krok 3: Metoda -->
+        <div class="calc-step" id="step-method">
+          <div class="calc-step-header">
+            <div class="calc-step-num" id="step-num-3">3</div>
+            <div>
+              <div class="calc-step-label">Metoda przedłużania</div>
+              <div class="calc-step-sub">Wybierz preferowaną metodę</div>
+            </div>
+          </div>
+          <div class="calc-options" id="methodOptions">
+            <div class="loading-placeholder" style="color:rgba(255,255,255,.3);font-size:.82rem;">Ładowanie...</div>
+          </div>
+          <!-- Info o metodzie keratynowej -->
+          <div class="keratynowa-info" id="keraatynowaInfo">
+            <strong>ℹ️ Metoda keratynowa – informacje</strong>
+            <p id="keratynowaTxt"></p>
+          </div>
+        </div>
+
+      </div><!-- /calc-steps -->
+
+      <!-- Wynik -->
+      <div class="calc-result" id="calcResult">
+        <div class="calc-result-eyebrow">Orientacyjna cena</div>
+        <div class="calc-result-price"><span>ok.</span> <span id="resultPrice">0</span> <span>zł</span></div>
+        <div class="calc-result-summary" id="resultSummary"></div>
+        <div class="calc-result-note">
+          ⚠️ <strong>Pamiętaj:</strong> Jest to wyłącznie cena orientacyjna. Ostateczna kwota jest ustalana indywidualnie podczas konsultacji i może różnić się od powyższej – zarówno in plus, jak i in minus.
+        </div>
+        <div class="calc-result-actions">
+          <a href="rezerwacja.html" class="btn btn-gold">Zarezerwuj konsultację</a>
+          <button class="calc-reset" id="calcReset">Zacznij od nowa</button>
+        </div>
+      </div>
+
+      <div class="calc-no-price" id="calcNoPrice">
+        Dla tej kombinacji nie określono jeszcze ceny. Skontaktuj się z nami, aby uzyskać indywidualną wycenę.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ KONTAKT ═══════════ -->
+  <section class="section section-dark" id="kontakt">
+    <div class="container">
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-logo">✦ Hello Beauty Studio</div>
+      <p class="footer-copy" id="footer-copy"></p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/calculator.js"></script>
+</body>
+</html>

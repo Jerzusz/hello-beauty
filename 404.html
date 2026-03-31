@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strona nie znaleziona – Hello Beauty Studio</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .not-found {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .not-found-inner { max-width: 480px; }
+    .not-found-code {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 8rem;
+      font-weight: 300;
+      line-height: 1;
+      color: rgba(200,169,110,.25);
+      letter-spacing: -.02em;
+    }
+    .not-found-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #fff;
+      margin: 8px 0 16px;
+    }
+    .not-found-desc {
+      font-size: .9rem;
+      color: rgba(255,255,255,.45);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .not-found-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="not-found">
+    <div class="not-found-inner">
+      <div class="not-found-code">404</div>
+      <h1 class="not-found-title">Ups… tej strony nie ma</h1>
+      <p class="not-found-desc">Szukana strona mogła zostać przeniesiona lub usunięta.<br />Wróć na stronę główną i spróbuj ponownie.</p>
+      <div class="not-found-actions">
+        <a href="index.html" class="btn btn-gold">← Strona główna</a>
+        <a href="rezerwacja.html" class="btn btn-outline">Zarezerwuj wizytę</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

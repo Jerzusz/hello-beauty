@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "tagline": "Luksusowe przedłużanie włosów",
+    "title": "Hello Beauty",
+    "title_em": "Studio",
+    "sub": "Profesjonalne przedłużanie i zagęszczanie włosów metodami keratynową, tape-in oraz mikro-ring. Twoje marzenia o włosach – zrealizowane."
+  },
+  "strip": [
+    "7 lat doświadczenia",
+    "500+ zadowolonych klientek",
+    "Naturalne włosy Remy",
+    "Certyfikowane metody"
+  ],
+  "offer": {
+    "eyebrow": "Co oferujemy",
+    "title": "Witamy w Hello Beauty Studio – przedłużanie włosów",
+    "desc": "Specjalizujemy się w profesjonalnym przedłużaniu i zagęszczaniu włosów. Każda klientka jest dla nas wyjątkowa."
+  },
+  "contact": {
+    "address": "Wojkowice\nwoj. śląskie",
+    "phone": "573 312 722",
+    "email": "kontakt@hellobeautystudio.pl",
+    "hours": "Pon – Sob: 9:00 – 18:00\nNiedziela: zamknięte",
+    "instagram": "#",
+    "facebook": "#"
+  }
+}
