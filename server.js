@@ -114,12 +114,14 @@ app.use((req, res, next) => {
 app.set('trust proxy', 1);
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(UPLOADS_DIR));
+const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
+  proxy: true,
   store: new FileStore({ path: path.join(__dirname, 'db', 'sessions'), ttl: 8 * 60 * 60, retries: 1, logFn: () => {} }),
   secret: process.env.SESSION_SECRET || 'salon-secret-key-2024',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 8 * 60 * 60 * 1000, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }
+  cookie: { maxAge: 8 * 60 * 60 * 1000, httpOnly: true, secure: isProduction ? 'auto' : false, sameSite: 'lax' }
 }));
 
 // Nagłówki bezpieczeństwa
@@ -288,10 +290,18 @@ app.post('/api/admin/login', (req, res) => {
   const admin = readDB('admin').find(a=>a.username===username);
   if (!admin||!bcrypt.compareSync(password, admin.password_hash)) return res.status(401).json({ error:'Nieprawidłowy login lub hasło' });
   loginAttempts.delete(req.ip);
-  req.session.adminId = admin.id;
-  res.json({ success:true });
+  req.session.regenerate(err => {
+    if (err) return res.status(500).json({ error:'Nie udało się utworzyć sesji' });
+    req.session.adminId = admin.id;
+    req.session.save(saveErr => {
+      if (saveErr) return res.status(500).json({ error:'Nie udało się zapisać sesji' });
+      res.json({ success:true });
+    });
+  });
 });
-app.post('/api/admin/logout', (req, res) => { req.session.destroy(); res.json({ success:true }); });
+app.post('/api/admin/logout', (req, res) => {
+  req.session.destroy(() => res.json({ success:true }));
+});
 app.get('/api/admin/check', (req, res) => res.json({ loggedIn:!!(req.session&&req.session.adminId) }));
 
 // ═══ ADMIN – REZERWACJE ════════════════════════════════════════════════════════
@@ -760,5 +770,6 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`\n✨ Hello Beauty Studio działa na http://localhost:${PORT}`);
   console.log(`🔑 Panel admina: http://localhost:${PORT}/admin.html`);
-  console.log(`   Login: admin | Hasło: admin123\n`);
+  const adminUsers = readDB('admin').map(a => a.username).join(', ') || 'brak';
+  console.log(`   Konta admin: ${adminUsers}\n`);
 });
