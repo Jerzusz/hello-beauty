@@ -12,16 +12,18 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="css/home.css" as="style" />
+  <link rel="stylesheet" href="css/home.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Przejdź do treści</a>
 
   <!-- ═══════════ NAWIGACJA ═══════════ -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar" id="navbar" aria-label="Nawigacja główna">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">✦ Hello Beauty Studio</a>
-      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="nav-burger" id="navBurger" aria-label="Otwórz menu"><span></span><span></span><span></span></button>
       <ul class="nav-links" id="navLinks">
         <li><a href="uslugi.html"      class="nav-link" data-page="uslugi.html">Usługi &amp; Cennik</a></li>
         <li><a href="kalkulator.html"  class="nav-link" data-page="kalkulator.html">Kalkulator</a></li>
@@ -33,6 +35,7 @@
     </div>
   </nav>
 
+  <main id="main-content">
   <!-- ═══════════ HERO ═══════════ -->
   <section class="hero" id="hero">
     <div class="hero-overlay"></div>
@@ -168,19 +171,19 @@
         <div class="contact-info">
           <div class="contact-card">
             <div class="contact-icon">📍</div>
-            <div><h4>Adres</h4><p id="hp-contact-address">Wojkowice<br />woj. śląskie</p></div>
+            <div class="contact-copy"><p class="contact-label">Adres</p><p id="hp-contact-address">Wojkowice<br />woj. śląskie</p></div>
           </div>
           <div class="contact-card">
             <div class="contact-icon">📞</div>
-            <div><h4>Telefon</h4><p><a id="hp-contact-phone-link" href="tel:573312722">573 312 722</a></p></div>
+            <div class="contact-copy"><p class="contact-label">Telefon</p><p><a id="hp-contact-phone-link" href="tel:573312722">573 312 722</a></p></div>
           </div>
           <div class="contact-card">
             <div class="contact-icon">✉️</div>
-              <div><h4>E-mail</h4><p><a id="hp-contact-email-link" href="mailto:hbs.kursy@gmail.com">hbs.kursy@gmail.com</a></p></div>
+              <div class="contact-copy"><p class="contact-label">E-mail</p><p><a id="hp-contact-email-link" href="mailto:hbs.kursy@gmail.com">hbs.kursy@gmail.com</a></p></div>
           </div>
           <div class="contact-card">
             <div class="contact-icon">🕐</div>
-            <div><h4>Godziny otwarcia</h4><p id="hp-contact-hours">Pon – Sob: 9:00 – 18:00<br />Niedziela: zamknięte</p></div>
+            <div class="contact-copy"><p class="contact-label">Godziny otwarcia</p><p id="hp-contact-hours">Pon – Sob: 9:00 – 18:00<br />Niedziela: zamknięte</p></div>
           </div>
           <div class="contact-socials">
             <a id="hp-contact-instagram" href="#" class="social-link">Instagram</a>
@@ -188,11 +191,12 @@
           </div>
         </div>
         <div class="contact-map-placeholder">
-          <iframe src="https://maps.google.com/maps?q=Hello+Beauty+Studio+Wojkowice&output=embed" width="100%" height="320" style="border:0;border-radius:12px;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe class="contact-map" title="Mapa dojazdu do Hello Beauty Studio" src="https://maps.google.com/maps?q=Hello+Beauty+Studio+Wojkowice&output=embed" width="100%" height="320" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
   </section>
+  </main>
 
   <!-- ═══════════ STOPKA ═══════════ -->
   <footer class="footer">
@@ -202,49 +206,74 @@
     </div>
   </footer>
 
-  <script src="js/nav.js"></script>
+  <script id="homepage-data" type="application/json">__HOMEPAGE_DATA__</script>
+  <script src="js/nav.js" defer></script>
   <script>
-    // Załaduj edytowalną treść strony głównej z API
-    (async () => {
+    (() => {
+      const dataNode = document.getElementById('homepage-data');
+      if (!dataNode) return;
+
+      let d;
       try {
-        const res = await fetch('/api/homepage');
-        if (!res.ok) return;
-        const d = await res.json();
+        d = JSON.parse(dataNode.textContent || '{}');
+      } catch {
+        return;
+      }
 
-        const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
-        const setHtml = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.innerHTML = val; };
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.textContent = val;
+      };
+      const setHtml = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.innerHTML = val;
+      };
 
-        // Hero
-        set('hp-hero-tagline', d.hero?.tagline);
-        if (d.hero?.title) {
-          const em = document.getElementById('hp-hero-title-em');
-          const titleEl = document.getElementById('hp-hero-title');
-          if (titleEl && em) { titleEl.innerHTML = ''; titleEl.appendChild(document.createTextNode(d.hero.title + '\n')); const br = document.createElement('br'); titleEl.appendChild(br); const emNew = document.createElement('em'); emNew.id = 'hp-hero-title-em'; emNew.textContent = d.hero.title_em || ''; titleEl.appendChild(emNew); }
+      set('hp-hero-tagline', d.hero?.tagline);
+      if (d.hero?.title) {
+        const titleEl = document.getElementById('hp-hero-title');
+        if (titleEl) {
+          titleEl.innerHTML = '';
+          titleEl.appendChild(document.createTextNode(d.hero.title + '\n'));
+          titleEl.appendChild(document.createElement('br'));
+          const emNew = document.createElement('em');
+          emNew.id = 'hp-hero-title-em';
+          emNew.textContent = d.hero.title_em || '';
+          titleEl.appendChild(emNew);
         }
-        set('hp-hero-sub', d.hero?.sub);
+      }
+      set('hp-hero-sub', d.hero?.sub);
 
-        // Strip
-        if (d.strip) d.strip.forEach((txt, i) => set(`hp-strip-${i}`, txt));
+      if (Array.isArray(d.strip)) d.strip.forEach((txt, i) => set(`hp-strip-${i}`, txt));
 
-        // Offer
-        set('hp-offer-eyebrow', d.offer?.eyebrow);
-        set('hp-offer-title', d.offer?.title);
-        set('hp-offer-desc', d.offer?.desc);
+      set('hp-offer-eyebrow', d.offer?.eyebrow);
+      set('hp-offer-title', d.offer?.title);
+      set('hp-offer-desc', d.offer?.desc);
 
-        // Contact
-        if (d.contact?.address) setHtml('hp-contact-address', d.contact.address.replace(/\n/g, '<br>'));
-        if (d.contact?.phone) {
-          const el = document.getElementById('hp-contact-phone-link');
-          if (el) { el.textContent = d.contact.phone; el.href = 'tel:' + d.contact.phone.replace(/\s/g, ''); }
+      if (d.contact?.address) setHtml('hp-contact-address', d.contact.address.replace(/\n/g, '<br>'));
+      if (d.contact?.phone) {
+        const el = document.getElementById('hp-contact-phone-link');
+        if (el) {
+          el.textContent = d.contact.phone;
+          el.href = 'tel:' + d.contact.phone.replace(/\s/g, '');
         }
-        if (d.contact?.email) {
-          const el = document.getElementById('hp-contact-email-link');
-          if (el) { el.textContent = d.contact.email; el.href = 'mailto:' + d.contact.email; }
+      }
+      if (d.contact?.email) {
+        const el = document.getElementById('hp-contact-email-link');
+        if (el) {
+          el.textContent = d.contact.email;
+          el.href = 'mailto:' + d.contact.email;
         }
-        if (d.contact?.hours) setHtml('hp-contact-hours', d.contact.hours.replace(/\n/g, '<br>'));
-        if (d.contact?.instagram) { const el = document.getElementById('hp-contact-instagram'); if (el) el.href = d.contact.instagram; }
-        if (d.contact?.facebook)  { const el = document.getElementById('hp-contact-facebook');  if (el) el.href = d.contact.facebook;  }
-      } catch (e) { /* Jeśli API nie odpowiada, zostaje treść domyślna */ }
+      }
+      if (d.contact?.hours) setHtml('hp-contact-hours', d.contact.hours.replace(/\n/g, '<br>'));
+      if (d.contact?.instagram) {
+        const el = document.getElementById('hp-contact-instagram');
+        if (el) el.href = d.contact.instagram;
+      }
+      if (d.contact?.facebook) {
+        const el = document.getElementById('hp-contact-facebook');
+        if (el) el.href = d.contact.facebook;
+      }
     })();
   </script>
 </body>

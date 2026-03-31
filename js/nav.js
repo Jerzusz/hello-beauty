@@ -9,15 +9,17 @@ const hasHero = document.querySelector('.hero');
 if (!hasHero) navbar.classList.add('scrolled');
 window.addEventListener('scroll', () => {
   if (hasHero) navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
+}, { passive: true });
 
 // ─── Hamburger menu ─────────────────────────────────
 const burger = document.getElementById('navBurger');
 const navLinks = document.getElementById('navLinks');
-burger.addEventListener('click', () => navLinks.classList.toggle('open'));
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'));
-});
+if (burger && navLinks) {
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+}
 
 // ─── Aktywny link w nawigacji (na podstawie bieżącej strony) ────────────────
 (function markActiveLink() {

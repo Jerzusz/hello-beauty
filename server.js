@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -9,6 +10,8 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const INDEX_HTML_PATH = path.join(__dirname, 'index.html');
+const INDEX_TEMPLATE = fs.readFileSync(INDEX_HTML_PATH, 'utf8');
 
 // ─── Foldery ────────────────────────────────────────────────────────────────
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
@@ -141,6 +144,7 @@ function checkReservationRateLimit(ip) {
 // ─── Middleware ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
+app.use(compression({ threshold: 1024 }));
 
 // Blokada dostępu do wrażliwych plików serwera (musi być PRZED express.static)
 const BLOCKED_STATIC = ['/db', '/node_modules', '/server.js', '/package.json', '/package-lock.json'];
@@ -153,8 +157,36 @@ app.use((req, res, next) => {
 });
 
 app.set('trust proxy', 1);
-app.use(express.static(path.join(__dirname)));
-app.use('/uploads', express.static(UPLOADS_DIR));
+
+const STATIC_ASSET_OPTIONS = {
+  etag: true,
+  maxAge: '30d',
+  immutable: true
+};
+
+const HTML_STATIC_OPTIONS = {
+  etag: true,
+  maxAge: 0,
+  setHeaders: (res, filePath) => {
+    if (/\.html?$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+};
+
+function serializeForInlineJson(value) {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
+app.get(['/', '/index.html'], (req, res) => {
+  const homepageData = serializeForInlineJson(readDB('homepage'));
+  res.type('html').send(INDEX_TEMPLATE.replace('__HOMEPAGE_DATA__', homepageData));
+});
+
+app.use('/css', express.static(path.join(__dirname, 'css'), STATIC_ASSET_OPTIONS));
+app.use('/js', express.static(path.join(__dirname, 'js'), STATIC_ASSET_OPTIONS));
+app.use('/uploads', express.static(UPLOADS_DIR, STATIC_ASSET_OPTIONS));
+app.use(express.static(path.join(__dirname), HTML_STATIC_OPTIONS));
 const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
   proxy: true,
