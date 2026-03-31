@@ -13,28 +13,69 @@ const PORT = process.env.PORT || 3000;
 // ─── Foldery ────────────────────────────────────────────────────────────────
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const DB_DIR = path.join(__dirname, 'db');
-[UPLOADS_DIR, DB_DIR].forEach(dir => { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); });
+const DB_RUNTIME_DIR = process.env.DB_RUNTIME_DIR || path.join(DB_DIR, 'runtime');
+const SESSION_DIR = path.join(DB_RUNTIME_DIR, 'sessions');
+[UPLOADS_DIR, DB_DIR, DB_RUNTIME_DIR, SESSION_DIR].forEach(dir => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
 
 // ─── Prosta baza JSON ────────────────────────────────────────────────────────
-function dbPath(table) { return path.join(DB_DIR, `${table}.json`); }
+const DEFAULT_DB = {
+  admin: () => [{ id: 1, username: 'admin', password_hash: bcrypt.hashSync('admin123', 10) }],
+  workers: () => ([
+    { id: 1, name: 'Sandra', work_days: [1, 2, 3, 4, 5, 6], work_start: '09:00', work_end: '18:00' },
+    { id: 2, name: 'Nikola', work_days: [1, 2, 3, 4, 5, 6], work_start: '09:00', work_end: '18:00' }
+  ]),
+  reservations: [],
+  portfolio: [],
+  blocked_slots: [],
+  services: [],
+  vacations: [],
+  faq: [],
+  homepage: { hero: {}, strip: [], offer: {}, contact: {} },
+  calculator: { lengths: [], densities: [], methods: [], keratynowa_info: '', prices: {} }
+};
+
+function getDefaultData(table) {
+  const value = DEFAULT_DB[table];
+  const resolved = typeof value === 'function' ? value() : (value !== undefined ? value : []);
+  return JSON.parse(JSON.stringify(resolved));
+}
+
+function seedDbPath(table) { return path.join(DB_DIR, `${table}.json`); }
+function runtimeDbPath(table) { return path.join(DB_RUNTIME_DIR, `${table}.json`); }
+function ensureDbFile(table) {
+  const runtimePath = runtimeDbPath(table);
+  if (fs.existsSync(runtimePath)) return runtimePath;
+
+  let initialData = getDefaultData(table);
+  const seedPath = seedDbPath(table);
+  if (fs.existsSync(seedPath)) {
+    try {
+      initialData = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+    } catch {
+      initialData = getDefaultData(table);
+    }
+  }
+
+  fs.writeFileSync(runtimePath, JSON.stringify(initialData, null, 2), 'utf8');
+  return runtimePath;
+}
+
+function dbPath(table) { return ensureDbFile(table); }
 function readDB(table) {
   try { return JSON.parse(fs.readFileSync(dbPath(table), 'utf8')); }
-  catch { return []; }
+  catch {
+    const fallback = getDefaultData(table);
+    writeDB(table, fallback);
+    return fallback;
+  }
 }
 function writeDB(table, data) { fs.writeFileSync(dbPath(table), JSON.stringify(data, null, 2), 'utf8'); }
 function nextId(arr) { return arr.length ? Math.max(...arr.map(r => r.id)) + 1 : 1; }
 
 // ─── Inicjalizacja baz ───────────────────────────────────────────────────────
-if (!fs.existsSync(dbPath('admin')) || readDB('admin').length === 0) {
-  writeDB('admin', [{ id:1, username:'admin', password_hash: bcrypt.hashSync('admin123', 10) }]);
-}
-if (!fs.existsSync(dbPath('workers')) || readDB('workers').length === 0) {
-  writeDB('workers', [
-    { id:1, name:'Sandra', work_days:[1,2,3,4,5,6], work_start:'09:00', work_end:'18:00' },
-    { id:2, name:'Nikola', work_days:[1,2,3,4,5,6], work_start:'09:00', work_end:'18:00' },
-  ]);
-}
-['reservations','portfolio','blocked_slots','services','vacations','faq'].forEach(t => { if (!fs.existsSync(dbPath(t))) writeDB(t, []); });
+Object.keys(DEFAULT_DB).forEach(ensureDbFile);
 
 // ─── Pomocniki czasu ─────────────────────────────────────────────────────────
 function timeToMin(t) { const [h,m] = t.split(':').map(Number); return h*60+m; }
@@ -117,7 +158,7 @@ app.use('/uploads', express.static(UPLOADS_DIR));
 const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
   proxy: true,
-  store: new FileStore({ path: path.join(__dirname, 'db', 'sessions'), ttl: 8 * 60 * 60, retries: 1, logFn: () => {} }),
+  store: new FileStore({ path: SESSION_DIR, ttl: 8 * 60 * 60, retries: 1, logFn: () => {} }),
   secret: process.env.SESSION_SECRET || 'salon-secret-key-2024',
   resave: false,
   saveUninitialized: false,
@@ -550,14 +591,13 @@ app.delete('/api/admin/workers/:id', requireAuth, (req, res) => {
 // ═══ STRONA GŁÓWNA – TREŚĆ ════════════════════════════════════════════════════
 app.get('/api/homepage', (req, res) => {
   try {
-    const data = JSON.parse(fs.readFileSync(path.join(DB_DIR, 'homepage.json'), 'utf8'));
-    res.json(data);
+    res.json(readDB('homepage'));
   } catch { res.status(500).json({ error: 'Błąd odczytu' }); }
 });
 
 app.put('/api/admin/homepage', requireAuth, (req, res) => {
   try {
-    fs.writeFileSync(path.join(DB_DIR, 'homepage.json'), JSON.stringify(req.body, null, 2), 'utf8');
+    writeDB('homepage', req.body);
     res.json({ success: true });
   } catch { res.status(500).json({ error: 'Błąd zapisu' }); }
 });
@@ -771,5 +811,6 @@ app.listen(PORT, () => {
   console.log(`\n✨ Hello Beauty Studio działa na http://localhost:${PORT}`);
   console.log(`🔑 Panel admina: http://localhost:${PORT}/admin.html`);
   const adminUsers = readDB('admin').map(a => a.username).join(', ') || 'brak';
+  console.log(`📦 Dane runtime: ${DB_RUNTIME_DIR}`);
   console.log(`   Konta admin: ${adminUsers}\n`);
 });

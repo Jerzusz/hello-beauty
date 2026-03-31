@@ -4,5 +4,6 @@ uploads/*
 !uploads/.gitkeep
 db/reservations.json
 db/admin.json
+db/runtime/
 
 db/sessions/
