@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const bcrypt = require('bcryptjs');
 
 const app = express();
@@ -110,9 +111,16 @@ app.use((req, res, next) => {
   next();
 });
 
+app.set('trust proxy', 1);
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(UPLOADS_DIR));
-app.use(session({ secret: process.env.SESSION_SECRET || 'salon-secret-key-2024', resave:false, saveUninitialized:false, cookie:{ maxAge:8*60*60*1000, httpOnly:true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' } }));
+app.use(session({
+  store: new FileStore({ path: path.join(__dirname, 'db', 'sessions'), ttl: 8 * 60 * 60, retries: 1, logFn: () => {} }),
+  secret: process.env.SESSION_SECRET || 'salon-secret-key-2024',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 8 * 60 * 60 * 1000, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }
+}));
 
 // Nagłówki bezpieczeństwa
 app.use((req, res, next) => {

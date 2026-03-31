@@ -1,6 +1,18 @@
-/* ═══════════════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════════════
    admin.js – Logika panelu administracyjnego
    ═══════════════════════════════════════════════════ */
+
+// ─── Globalny wrapper fetch – obsługa wygaśnięcia sesji (401) ──────────────
+async function authFetch(url, options = {}) {
+  const res = await fetch(url, options);
+  if (res.status === 401) {
+    document.getElementById('adminLayout').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginError').textContent = 'Sesja wygasła. Zaloguj się ponownie.';
+    throw new Error('401 Unauthorized');
+  }
+  return res;
+}
 
 // ─── Sprawdź sesję przy ładowaniu ───────────────────
 (async () => {
@@ -63,7 +75,7 @@ let currentStatusFilter = 'all';
 
 async function loadReservations() {
   try {
-    const res = await fetch('/api/admin/reservations');
+    const res = await authFetch('/api/admin/reservations');
     allReservations = await res.json();
     renderReservations();
     updatePendingBadge();
@@ -133,7 +145,7 @@ document.querySelectorAll('.filter-pill').forEach(btn => {
 });
 
 window.changeStatus = async (id, status) => {
-  await fetch(`/api/admin/reservations/${id}`, {
+  await authFetch(`/api/admin/reservations/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status })
@@ -143,12 +155,12 @@ window.changeStatus = async (id, status) => {
 
 window.deleteReservation = async (id) => {
   if (!confirm('Na pewno usunąć tę rezerwację?')) return;
-  await fetch(`/api/admin/reservations/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/reservations/${id}`, { method: 'DELETE' });
   loadReservations();
 };
 
 window.slotChangeStatus = async (id, status, date) => {
-  await fetch(`/api/admin/reservations/${id}`, {
+  await authFetch(`/api/admin/reservations/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status })
@@ -190,7 +202,7 @@ function statusLabel(s) {
 
   async function fetchVacationsMap() {
     try {
-      const r = await fetch('/api/admin/vacations');
+      const r = await authFetch('/api/admin/vacations');
       const vacations = await r.json();
       const map = {};
       for (const v of vacations) {
@@ -267,7 +279,7 @@ function statusLabel(s) {
     slotsEl.innerHTML = '<div class="loading-msg">Ładowanie...</div>';
 
     try {
-      const res  = await fetch(`/api/admin/slots/${dateStr}`);
+      const res  = await authFetch(`/api/admin/slots/${dateStr}`);
       const data = await res.json();
       const slots = data.slots || (Array.isArray(data) ? data : []);
       const workersOnVacation = data.workersOnVacation || [];
@@ -370,7 +382,7 @@ function statusLabel(s) {
     openReasonModal(`Zablokuj termin ${time} (${date})`, async (reason) => {
       const msgEl = document.getElementById('adminBlockMsg');
       try {
-        const res  = await fetch('/api/admin/block', {
+        const res  = await authFetch('/api/admin/block', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ date, time, reason })
         });
@@ -386,7 +398,7 @@ function statusLabel(s) {
   window.adminUnblock = async (date, time) => {
     const msgEl = document.getElementById('adminBlockMsg');
     try {
-      const res  = await fetch('/api/admin/block', {
+      const res  = await authFetch('/api/admin/block', {
         method: 'DELETE', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, time })
       });
@@ -404,7 +416,7 @@ function statusLabel(s) {
       try {
         for (let h = 9; h <= 17; h++) {
           const time = `${String(h).padStart(2,'0')}:00`;
-          await fetch('/api/admin/block', {
+          await authFetch('/api/admin/block', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ date: dateStr, time, reason })
           });
@@ -421,7 +433,7 @@ function statusLabel(s) {
     const slotsEl = document.getElementById('adminDaySlots');
     if (!slotsEl || !activeDate) return;
     try {
-      const res  = await fetch(`/api/admin/slots/${date}`);
+      const res  = await authFetch(`/api/admin/slots/${date}`);
       const data = await res.json();
       const slots = data.slots || (Array.isArray(data) ? data : []);
       const workersOnVacation = data.workersOnVacation || [];
@@ -485,7 +497,7 @@ function renderPortfolioAdmin() {
 
 window.deletePhoto = async (id) => {
   if (!confirm('Usunąć to zdjęcie?')) return;
-  await fetch(`/api/admin/portfolio/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/portfolio/${id}`, { method: 'DELETE' });
   loadPortfolioAdmin();
 };
 
@@ -537,7 +549,7 @@ document.getElementById('uploadForm').addEventListener('submit', async e => {
   const interval = setInterval(() => { p = Math.min(p + 10, 90); fill.style.width = p + '%'; }, 100);
 
   try {
-    const res = await fetch('/api/admin/portfolio', { method: 'POST', body: formData });
+    const res = await authFetch('/api/admin/portfolio', { method: 'POST', body: formData });
     const json = await res.json();
     clearInterval(interval);
     fill.style.width = '100%';
@@ -725,7 +737,7 @@ document.getElementById('saveServiceBtn').addEventListener('click', async () => 
 
 window.deleteSvc = async (id) => {
   if (!confirm('Usunąć tę usługę?')) return;
-  await fetch(`/api/admin/services/${id}`, { method:'DELETE' });
+  await authFetch(`/api/admin/services/${id}`, { method:'DELETE' });
   loadServicesAdmin();
 };
 
@@ -733,7 +745,7 @@ window.deleteSvc = async (id) => {
 // PRACOWNICY
 // ═══════════════════════════════════════════════════
 async function loadWorkersAdmin() {
-  const res = await fetch('/api/admin/workers');
+  const res = await authFetch('/api/admin/workers');
   const workers = await res.json();
   renderWorkersAdmin(workers);
   // Uzupełnij listę pracowników w formularzu urlopów
@@ -786,7 +798,7 @@ document.getElementById('cancelWorkerBtn').addEventListener('click', () => {
 });
 
 window.editWorker = async (id) => {
-  const res = await fetch('/api/admin/workers');
+  const res = await authFetch('/api/admin/workers');
   const workers = await res.json();
   const w = workers.find(x => x.id === id);
   if (!w) return;
@@ -823,7 +835,7 @@ document.getElementById('saveWorkerBtn').addEventListener('click', async () => {
 
 window.deleteWorker = async (id) => {
   if (!confirm('Usunąć tego pracownika?')) return;
-  await fetch(`/api/admin/workers/${id}`, { method:'DELETE' });
+  await authFetch(`/api/admin/workers/${id}`, { method:'DELETE' });
   loadWorkersAdmin();
 };
 // ═══════════════════════════════════════════════════
@@ -835,7 +847,7 @@ async function loadVacations() {
   const list = document.getElementById('vacationsList');
   if (!list) return;
   try {
-    const res = await fetch('/api/admin/vacations');
+    const res = await authFetch('/api/admin/vacations');
     allVacations = await res.json();
     renderVacations();
   } catch {
@@ -872,7 +884,7 @@ document.getElementById('saveVacationBtn').addEventListener('click', async () =>
   if (!worker_name) { showMsg(msgEl, 'Wybierz pracownika.', 'err'); return; }
   if (!date_from || !date_to) { showMsg(msgEl, 'Podaj daty urlopu.', 'err'); return; }
   if (date_from > date_to) { showMsg(msgEl, 'Data "od" musi być wcześniejsza niż "do".', 'err'); return; }
-  const res = await fetch('/api/admin/vacations', {
+  const res = await authFetch('/api/admin/vacations', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ worker_name, date_from, date_to, reason })
   });
@@ -889,7 +901,7 @@ document.getElementById('saveVacationBtn').addEventListener('click', async () =>
 
 window.deleteVacation = async (id) => {
   if (!confirm('Usunąć ten urlop?')) return;
-  await fetch(`/api/admin/vacations/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/vacations/${id}`, { method: 'DELETE' });
   loadVacations();
 };
 // ─── Helpers ─────────────────────────────────────────
@@ -961,7 +973,7 @@ document.getElementById('saveHomepageBtn').addEventListener('click', async () =>
   };
 
   try {
-    const res = await fetch('/api/admin/homepage', {
+    const res = await authFetch('/api/admin/homepage', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -980,7 +992,7 @@ let calcAdminData = null;
 
 async function loadCalculatorAdmin() {
   try {
-    const res = await fetch('/api/admin/calculator');
+    const res = await authFetch('/api/admin/calculator');
     calcAdminData = await res.json();
     renderCalcLengths();
     renderCalcDensities();
@@ -1035,7 +1047,7 @@ window.cancelEditCalcLength = (id) => {
 window.saveCalcLength = async (id) => {
   const label = document.getElementById(`calc-length-input-${id}`).value.trim();
   if (!label) { alert('Podaj nazwę'); return; }
-  const res = await fetch(`/api/admin/calculator/lengths/${id}`, {
+  const res = await authFetch(`/api/admin/calculator/lengths/${id}`, {
     method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label })
   });
   const json = await res.json();
@@ -1044,7 +1056,7 @@ window.saveCalcLength = async (id) => {
 window.addCalcLength = async () => {
   const label = document.getElementById('newLengthLabel').value.trim();
   if (!label) { alert('Podaj nazwę długości'); return; }
-  const res = await fetch('/api/admin/calculator/lengths', {
+  const res = await authFetch('/api/admin/calculator/lengths', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label })
   });
   const json = await res.json();
@@ -1053,7 +1065,7 @@ window.addCalcLength = async () => {
 };
 window.deleteCalcLength = async (id) => {
   if (!confirm('Usunąć tę długość? Spowoduje to usunięcie powiązanych cen.')) return;
-  await fetch(`/api/admin/calculator/lengths/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/calculator/lengths/${id}`, { method: 'DELETE' });
   await loadCalculatorAdmin();
 };
 
@@ -1099,7 +1111,7 @@ window.cancelEditCalcDensity = (id) => {
 window.saveCalcDensity = async (id) => {
   const label = document.getElementById(`calc-density-input-${id}`).value.trim();
   if (!label) { alert('Podaj nazwę'); return; }
-  const res = await fetch(`/api/admin/calculator/densities/${id}`, {
+  const res = await authFetch(`/api/admin/calculator/densities/${id}`, {
     method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label })
   });
   const json = await res.json();
@@ -1108,7 +1120,7 @@ window.saveCalcDensity = async (id) => {
 window.addCalcDensity = async () => {
   const label = document.getElementById('newDensityLabel').value.trim();
   if (!label) { alert('Podaj nazwę zagęszczenia'); return; }
-  const res = await fetch('/api/admin/calculator/densities', {
+  const res = await authFetch('/api/admin/calculator/densities', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label })
   });
   const json = await res.json();
@@ -1117,7 +1129,7 @@ window.addCalcDensity = async () => {
 };
 window.deleteCalcDensity = async (id) => {
   if (!confirm('Usunąć to zagęszczenie? Spowoduje to usunięcie powiązanych cen.')) return;
-  await fetch(`/api/admin/calculator/densities/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/calculator/densities/${id}`, { method: 'DELETE' });
   await loadCalculatorAdmin();
 };
 
@@ -1168,7 +1180,7 @@ window.saveCalcMethod = async (id) => {
   const label = document.getElementById(`calc-method-input-${id}`).value.trim();
   const is_keratynowa = document.getElementById(`calc-method-kera-${id}`).checked;
   if (!label) { alert('Podaj nazwę'); return; }
-  const res = await fetch(`/api/admin/calculator/methods/${id}`, {
+  const res = await authFetch(`/api/admin/calculator/methods/${id}`, {
     method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label, is_keratynowa })
   });
   const json = await res.json();
@@ -1178,7 +1190,7 @@ window.addCalcMethod = async () => {
   const label = document.getElementById('newMethodLabel').value.trim();
   const is_keratynowa = document.getElementById('newMethodIsKeratynowa').checked;
   if (!label) { alert('Podaj nazwę metody'); return; }
-  const res = await fetch('/api/admin/calculator/methods', {
+  const res = await authFetch('/api/admin/calculator/methods', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ label, is_keratynowa })
   });
   const json = await res.json();
@@ -1190,7 +1202,7 @@ window.addCalcMethod = async () => {
 };
 window.deleteCalcMethod = async (id) => {
   if (!confirm('Usunąć tę metodę? Spowoduje to usunięcie powiązanych cen.')) return;
-  await fetch(`/api/admin/calculator/methods/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/calculator/methods/${id}`, { method: 'DELETE' });
   await loadCalculatorAdmin();
 };
 
@@ -1198,7 +1210,7 @@ window.deleteCalcMethod = async (id) => {
 window.saveKeratynowaaInfo = async () => {
   const keratynowa_info = document.getElementById('keraatynowaInfoAdmin').value.trim();
   const msgEl = document.getElementById('keratynowaaInfoMsg');
-  const res = await fetch('/api/admin/calculator/keratynowa-info', {
+  const res = await authFetch('/api/admin/calculator/keratynowa-info', {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ keratynowa_info })
   });
@@ -1263,7 +1275,7 @@ window.savePriceMatrix = async () => {
     const val = inp.value.trim();
     prices[inp.dataset.key] = val === '' ? null : parseFloat(val) || 0;
   });
-  const res = await fetch('/api/admin/calculator/prices', {
+  const res = await authFetch('/api/admin/calculator/prices', {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prices })
   });
@@ -1283,7 +1295,7 @@ let allFaqAdmin = [];
 
 async function loadFaqAdmin() {
   try {
-    const res = await fetch('/api/admin/faq');
+    const res = await authFetch('/api/admin/faq');
     allFaqAdmin = await res.json();
     renderFaqAdmin();
   } catch {
@@ -1363,7 +1375,7 @@ window.editFaq = (id) => {
 
 window.deleteFaq = async (id) => {
   if (!confirm('Usunąć to pytanie?')) return;
-  await fetch(`/api/admin/faq/${id}`, { method: 'DELETE' });
+  await authFetch(`/api/admin/faq/${id}`, { method: 'DELETE' });
   loadFaqAdmin();
 };
 
@@ -1372,7 +1384,7 @@ window.moveFaqUp = async (id) => {
   if (idx <= 0) return;
   const order = allFaqAdmin.map(f => f.id);
   [order[idx - 1], order[idx]] = [order[idx], order[idx - 1]];
-  await fetch('/api/admin/faq-reorder', {
+  await authFetch('/api/admin/faq-reorder', {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ order })
   });
@@ -1384,7 +1396,7 @@ window.moveFaqDown = async (id) => {
   if (idx < 0 || idx >= allFaqAdmin.length - 1) return;
   const order = allFaqAdmin.map(f => f.id);
   [order[idx], order[idx + 1]] = [order[idx + 1], order[idx]];
-  await fetch('/api/admin/faq-reorder', {
+  await authFetch('/api/admin/faq-reorder', {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ order })
   });
@@ -1475,7 +1487,7 @@ document.getElementById('saveMrBtn').addEventListener('click', async () => {
   }
 
   try {
-    const res = await fetch('/api/admin/reservations', {
+    const res = await authFetch('/api/admin/reservations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
