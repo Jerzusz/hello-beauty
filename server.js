@@ -36,7 +36,8 @@ const DEFAULT_DB = {
   vacations: [],
   faq: [],
   homepage: { hero: {}, strip: [], offer: {}, contact: {} },
-  calculator: { lengths: [], densities: [], methods: [], keratynowa_info: '', prices: {} }
+  calculator: { lengths: [], densities: [], methods: [], keratynowa_info: '', prices: {} },
+  rodo: { cookie_banner: { text: '', accept_btn: 'Akceptuję', reject_btn: 'Odrzucam', details_link: 'Polityka prywatności' }, privacy_policy: { title: 'Polityka prywatności i RODO', intro: '', sections: [] }, booking_consent: '', admin_data_note: '' }
 };
 
 function getDefaultData(table) {
@@ -780,6 +781,47 @@ app.put('/api/admin/calculator/prices', requireAuth, (req, res) => {
   data.prices = clean;
   writeCalculator(data);
   res.json({ success: true });
+});
+
+// ═══ RODO / Polityka prywatności ══════════════════════════════════════════════
+app.get('/api/rodo', (req, res) => {
+  try { res.json(readDB('rodo')); }
+  catch { res.status(500).json({ error: 'Błąd odczytu' }); }
+});
+
+app.get('/api/admin/rodo', requireAuth, (req, res) => {
+  try { res.json(readDB('rodo')); }
+  catch { res.status(500).json({ error: 'Błąd odczytu' }); }
+});
+
+app.put('/api/admin/rodo', requireAuth, (req, res) => {
+  try {
+    const { cookie_banner, privacy_policy, booking_consent, admin_data_note } = req.body;
+    if (!cookie_banner || !privacy_policy) return res.status(400).json({ error: 'Nieprawidłowe dane' });
+    // Walidacja sekcji polityki prywatności
+    if (privacy_policy.sections && !Array.isArray(privacy_policy.sections))
+      return res.status(400).json({ error: 'Sekcje polityki prywatności muszą być tablicą' });
+    const data = {
+      cookie_banner: {
+        text: String(cookie_banner.text || '').slice(0, 2000),
+        accept_btn: String(cookie_banner.accept_btn || 'Akceptuję').slice(0, 50),
+        reject_btn: String(cookie_banner.reject_btn || 'Odrzucam').slice(0, 50),
+        details_link: String(cookie_banner.details_link || 'Polityka prywatności').slice(0, 100)
+      },
+      privacy_policy: {
+        title: String(privacy_policy.title || '').slice(0, 200),
+        intro: String(privacy_policy.intro || '').slice(0, 5000),
+        sections: (privacy_policy.sections || []).map(s => ({
+          heading: String(s.heading || '').slice(0, 200),
+          content: String(s.content || '').slice(0, 5000)
+        }))
+      },
+      booking_consent: String(booking_consent || '').slice(0, 1000),
+      admin_data_note: String(admin_data_note || '').slice(0, 1000)
+    };
+    writeDB('rodo', data);
+    res.json({ success: true });
+  } catch { res.status(500).json({ error: 'Błąd zapisu' }); }
 });
 
 // ═══ FAQ ══════════════════════════════════════════════════════════════════════

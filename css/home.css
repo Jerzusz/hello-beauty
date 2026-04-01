@@ -403,6 +403,56 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .footer-brand { color: var(--gold); font-family: var(--font-serif); font-size: 1.1rem; letter-spacing: 0.06em; }
 .footer-copy { color: rgba(255, 255, 255, 0.42); font-size: 0.78rem; letter-spacing: 0.05em; }
+.footer-privacy-link {
+  font-size:.75rem; color:rgba(255,255,255,.35); letter-spacing:.03em;
+  transition: color var(--transition);
+}
+.footer-privacy-link:hover { color: var(--gold); }
+
+/* ═══════════ COOKIE BANNER ═══════════ */
+.cookie-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+  background: rgba(10, 10, 10, .97);
+  border-top: 1px solid rgba(192,192,192,.15);
+  backdrop-filter: blur(12px);
+  padding: 20px 0;
+  animation: cookieSlideUp .4s ease;
+}
+@keyframes cookieSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.cookie-banner-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.cookie-text {
+  flex: 1; min-width: 240px;
+  font-size: .85rem; color: rgba(255,255,255,.7); line-height: 1.6;
+}
+.cookie-actions {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+}
+.cookie-link {
+  font-size: .8rem; color: var(--gold); text-decoration: underline;
+  transition: color var(--transition);
+}
+.cookie-link:hover { color: var(--gold-light); }
+.cookie-btn {
+  padding: 10px 24px; border-radius: 6px; font-size: .8rem; font-weight: 600;
+  letter-spacing: .04em; transition: all var(--transition); cursor: pointer;
+}
+.cookie-btn-accept {
+  background: var(--gold); color: #000; border: 1px solid var(--gold);
+}
+.cookie-btn-accept:hover { background: var(--gold-light); }
+.cookie-btn-reject {
+  background: transparent; color: rgba(255,255,255,.5);
+  border: 1px solid rgba(255,255,255,.2);
+}
+.cookie-btn-reject:hover {
+  color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.4);
+}
 
 a:focus-visible,
 button:focus-visible {

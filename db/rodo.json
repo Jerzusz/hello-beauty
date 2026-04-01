@@ -1,0 +1,48 @@
+{
+  "cookie_banner": {
+    "text": "Ta strona korzysta z plików cookies w celu świadczenia usług na najwyższym poziomie. Kontynuując korzystanie ze strony, zgadzasz się na ich użycie.",
+    "accept_btn": "Akceptuję",
+    "reject_btn": "Odrzucam",
+    "details_link": "Polityka prywatności"
+  },
+  "privacy_policy": {
+    "title": "Polityka prywatności i RODO",
+    "intro": "Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych przekazanych przez Użytkowników w związku z korzystaniem z usług Hello Beauty Studio.",
+    "sections": [
+      {
+        "heading": "1. Administrator danych osobowych",
+        "content": "Administratorem danych osobowych jest Hello Beauty Studio z siedzibą w Wojkowicach, woj. śląskie. Kontakt z administratorem możliwy jest pod adresem e-mail: hbs.kursy@gmail.com lub telefonicznie: 573 312 722."
+      },
+      {
+        "heading": "2. Zakres zbieranych danych",
+        "content": "Zbieramy następujące dane osobowe: imię, numer telefonu, adres e-mail (opcjonalnie), notatki do rezerwacji. Dane te są niezbędne do realizacji usługi rezerwacji wizyt oraz kontaktu z klientem."
+      },
+      {
+        "heading": "3. Cel przetwarzania danych",
+        "content": "Dane osobowe przetwarzane są w celu: realizacji rezerwacji wizyt, kontaktu z klientem w sprawie umówionej wizyty, informowania o zmianach w terminach, prowadzenia dokumentacji związanej z wykonywanymi usługami."
+      },
+      {
+        "heading": "4. Podstawa prawna przetwarzania",
+        "content": "Dane osobowe przetwarzane są na podstawie: art. 6 ust. 1 lit. a RODO – zgoda osoby, której dane dotyczą; art. 6 ust. 1 lit. b RODO – przetwarzanie jest niezbędne do wykonania umowy (rezerwacji wizyty); art. 6 ust. 1 lit. f RODO – prawnie uzasadniony interes administratora."
+      },
+      {
+        "heading": "5. Okres przechowywania danych",
+        "content": "Dane osobowe przechowywane są przez okres niezbędny do realizacji usługi, a po jej zakończeniu przez okres wymagany przepisami prawa lub do momentu wycofania zgody przez osobę, której dane dotyczą."
+      },
+      {
+        "heading": "6. Prawa osób, których dane dotyczą",
+        "content": "Każda osoba, której dane są przetwarzane, ma prawo do: dostępu do swoich danych, sprostowania danych, usunięcia danych (prawo do bycia zapomnianym), ograniczenia przetwarzania, przenoszenia danych, wniesienia sprzeciwu wobec przetwarzania, cofnięcia zgody w dowolnym momencie. W celu realizacji powyższych praw prosimy o kontakt mailowy lub telefoniczny."
+      },
+      {
+        "heading": "7. Pliki cookies",
+        "content": "Strona internetowa wykorzystuje pliki cookies w celu: zapamiętania preferencji użytkownika, obsługi sesji logowania w panelu administracyjnym, analizy ruchu na stronie. Użytkownik może w każdej chwili zmienić ustawienia przeglądarki dotyczące plików cookies."
+      },
+      {
+        "heading": "8. Bezpieczeństwo danych",
+        "content": "Administrator stosuje odpowiednie środki techniczne i organizacyjne zapewniające ochronę przetwarzanych danych osobowych, w szczególności zabezpiecza dane przed ich udostępnieniem osobom nieupoważnionym, przetwarzaniem z naruszeniem prawa oraz zmianą, utratą, uszkodzeniem lub zniszczeniem."
+      }
+    ]
+  },
+  "booking_consent": "Wyrażam zgodę na przetwarzanie moich danych osobowych (imię, telefon) przez Hello Beauty Studio w celu realizacji rezerwacji wizyty, zgodnie z Polityką prywatności.",
+  "admin_data_note": "Pamiętaj: jako administrator danych osobowych masz obowiązek chronić dane klientów zgodnie z RODO. Nie udostępniaj danych osobowych klientów osobom trzecim bez ich zgody."
+}

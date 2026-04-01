@@ -153,6 +153,14 @@ const bookingSuccess = document.getElementById('bookingSuccess');
 
 bookingForm.addEventListener('submit', async e => {
   e.preventDefault();
+
+  // Sprawdź zgodę RODO
+  const rodoCheckbox = document.getElementById('rodoConsent');
+  if (rodoCheckbox && !rodoCheckbox.checked) {
+    showFormError('Musisz wyrazić zgodę na przetwarzanie danych osobowych.');
+    return;
+  }
+
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Wysyłanie...';
@@ -220,3 +228,21 @@ document.getElementById('serviceSelect').addEventListener('change', onServiceCha
 document.getElementById('variantSelect').addEventListener('change', onVariantChange);
 
 populateServiceSelect();
+
+// ─── Załaduj treść zgody RODO ────────────────────────
+(async function loadRodoConsent() {
+  try {
+    const res = await fetch('/api/rodo');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.booking_consent) {
+      const textEl = document.getElementById('rodoConsentText');
+      if (textEl) {
+        textEl.innerHTML = escHtml(data.booking_consent).replace(
+          /Polityk[aąę] prywatności/gi,
+          '<a href="polityka-prywatnosci.html" target="_blank">$&</a>'
+        );
+      }
+    }
+  } catch { /* ignoruj */ }
+})();

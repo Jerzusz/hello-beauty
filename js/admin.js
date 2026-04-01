@@ -55,6 +55,7 @@ function showAdmin() {
   loadHomepageAdmin();
   loadCalculatorAdmin();
   loadFaqAdmin();
+  loadRodoAdmin();
 }
 
 // ─── Nawigacja sidebar ───────────────────────────────
@@ -1402,6 +1403,136 @@ window.moveFaqDown = async (id) => {
   });
   loadFaqAdmin();
 };
+
+// ═══════════════════════════════════════════════════
+// RODO – Panel admina
+// ═══════════════════════════════════════════════════
+let rodoSections = [];
+
+async function loadRodoAdmin() {
+  try {
+    const res = await authFetch('/api/admin/rodo');
+    const d = await res.json();
+
+    const val = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined) el.value = v; };
+
+    // Cookie banner
+    val('rodo-cookie-text',   d.cookie_banner?.text);
+    val('rodo-cookie-accept', d.cookie_banner?.accept_btn);
+    val('rodo-cookie-reject', d.cookie_banner?.reject_btn);
+    val('rodo-cookie-link',   d.cookie_banner?.details_link);
+
+    // Booking consent
+    val('rodo-booking-consent', d.booking_consent);
+
+    // Privacy policy
+    val('rodo-pp-title', d.privacy_policy?.title);
+    val('rodo-pp-intro', d.privacy_policy?.intro);
+
+    // Admin note
+    val('rodo-admin-note', d.admin_data_note);
+
+    // Sections
+    rodoSections = d.privacy_policy?.sections || [];
+    renderRodoSections();
+  } catch { /* ignoruj */ }
+}
+
+function renderRodoSections() {
+  const el = document.getElementById('rodoSectionsList');
+  if (!el) return;
+  if (rodoSections.length === 0) {
+    el.innerHTML = '<div class="loading-msg">Brak sekcji. Kliknij „+ Dodaj sekcję".</div>';
+    return;
+  }
+  el.innerHTML = rodoSections.map((s, idx) => `
+    <div class="rodo-section-row" style="background:#111;border:1px solid #333;border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div class="form-group" style="margin-bottom:10px;">
+        <label style="font-size:.75rem;color:rgba(255,255,255,.5);">Nagłówek sekcji</label>
+        <input type="text" class="rodo-sec-heading" data-idx="${idx}" value="${escHtml(s.heading)}" style="width:100%;box-sizing:border-box;background:#0a0a0a;border:1px solid #444;border-radius:6px;color:#fff;padding:8px 10px;font-size:.85rem;" />
+      </div>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label style="font-size:.75rem;color:rgba(255,255,255,.5);">Treść</label>
+        <textarea class="rodo-sec-content" data-idx="${idx}" rows="3" style="width:100%;box-sizing:border-box;background:#0a0a0a;border:1px solid #444;border-radius:6px;color:#fff;padding:8px 10px;font-size:.85rem;resize:vertical;">${escHtml(s.content)}</textarea>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        ${idx > 0 ? `<button class="action-btn btn-sm" onclick="moveRodoSection(${idx},-1)" title="Przesuń wyżej">↑</button>` : ''}
+        ${idx < rodoSections.length - 1 ? `<button class="action-btn btn-sm" onclick="moveRodoSection(${idx},1)" title="Przesuń niżej">↓</button>` : ''}
+        <button class="action-btn action-delete btn-sm" onclick="removeRodoSection(${idx})">🗑 Usuń</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('addRodoSectionBtn').addEventListener('click', () => {
+  collectRodoSectionsFromDOM();
+  rodoSections.push({ heading: '', content: '' });
+  renderRodoSections();
+  // Scroll to new section
+  const list = document.getElementById('rodoSectionsList');
+  if (list.lastElementChild) list.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+});
+
+window.removeRodoSection = (idx) => {
+  collectRodoSectionsFromDOM();
+  rodoSections.splice(idx, 1);
+  renderRodoSections();
+};
+
+window.moveRodoSection = (idx, dir) => {
+  collectRodoSectionsFromDOM();
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= rodoSections.length) return;
+  [rodoSections[idx], rodoSections[newIdx]] = [rodoSections[newIdx], rodoSections[idx]];
+  renderRodoSections();
+};
+
+function collectRodoSectionsFromDOM() {
+  document.querySelectorAll('.rodo-sec-heading').forEach(el => {
+    const i = parseInt(el.dataset.idx);
+    if (rodoSections[i]) rodoSections[i].heading = el.value;
+  });
+  document.querySelectorAll('.rodo-sec-content').forEach(el => {
+    const i = parseInt(el.dataset.idx);
+    if (rodoSections[i]) rodoSections[i].content = el.value;
+  });
+}
+
+document.getElementById('saveRodoBtn').addEventListener('click', async () => {
+  const msg = document.getElementById('rodoMsg');
+  const get = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+
+  collectRodoSectionsFromDOM();
+
+  const body = {
+    cookie_banner: {
+      text:         get('rodo-cookie-text'),
+      accept_btn:   get('rodo-cookie-accept'),
+      reject_btn:   get('rodo-cookie-reject'),
+      details_link: get('rodo-cookie-link')
+    },
+    privacy_policy: {
+      title:    get('rodo-pp-title'),
+      intro:    get('rodo-pp-intro'),
+      sections: rodoSections
+    },
+    booking_consent:  get('rodo-booking-consent'),
+    admin_data_note:  get('rodo-admin-note')
+  };
+
+  try {
+    const res = await authFetch('/api/admin/rodo', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    if (json.success) showMsg(msg, '✓ Zapisano ustawienia RODO!', 'ok');
+    else showMsg(msg, json.error || 'Błąd zapisu', 'err');
+  } catch {
+    showMsg(msg, 'Brak połączenia z serwerem.', 'err');
+  }
+});
 
 // ═══════════════════════════════════════════════════
 // EKSPORT CSV
