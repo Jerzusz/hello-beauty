@@ -51,10 +51,10 @@
     grid.innerHTML = filteredItems.map((item, idx) => `
       <div class="portfolio-item" data-index="${idx}">
         <img src="/uploads/${item.filename}" alt="${escHtml(item.title || 'Portfolio')}" loading="lazy" />
-        <div class="portfolio-overlay">
+        ${(item.title || item.description) ? `<div class="portfolio-desc-bar">
           ${item.title ? `<h4>${escHtml(item.title)}</h4>` : ''}
           ${item.description ? `<p>${escHtml(item.description)}</p>` : ''}
-        </div>
+        </div>` : ''}
         <span class="portfolio-cat-badge">${catLabels[item.category] || item.category}</span>
       </div>
     `).join('');

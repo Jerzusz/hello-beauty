@@ -18,6 +18,7 @@
     /* ── FAQ ── */
     .faq-section {
       padding: 80px 0 100px;
+      background: #faf7f4;
     }
     .faq-list {
       max-width: 760px;
@@ -27,14 +28,15 @@
       gap: 12px;
     }
     .faq-item {
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
       border-radius: 12px;
       overflow: hidden;
       transition: border-color .3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
     }
     .faq-item.open {
-      border-color: rgba(192,192,192,.2);
+      border-color: rgba(0,0,0,.12);
     }
     .faq-question {
       display: flex;
@@ -47,31 +49,31 @@
       transition: background .2s;
     }
     .faq-question:hover {
-      background: rgba(255,255,255,.03);
+      background: rgba(0,0,0,.02);
     }
     .faq-question-text {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.1rem;
       font-weight: 500;
-      color: #fff;
+      color: #1a1a1a;
       line-height: 1.4;
     }
     .faq-icon {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      border: 1px solid rgba(192,192,192,.25);
+      border: 1px solid rgba(0,0,0,.15);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: rgba(192,192,192,.7);
+      color: #888;
       font-size: .9rem;
       transition: transform .3s, background .3s;
     }
     .faq-item.open .faq-icon {
       transform: rotate(45deg);
-      background: rgba(192,192,192,.1);
+      background: rgba(0,0,0,.05);
     }
     .faq-answer {
       max-height: 0;
@@ -84,20 +86,20 @@
     .faq-answer-inner {
       padding: 0 24px 20px;
       font-size: .87rem;
-      color: rgba(255,255,255,.55);
+      color: #555;
       line-height: 1.8;
-      border-top: 1px solid rgba(255,255,255,.05);
+      border-top: 1px solid rgba(0,0,0,.06);
       padding-top: 16px;
     }
     .faq-empty {
       text-align: center;
-      color: rgba(255,255,255,.3);
+      color: #888;
       font-size: .85rem;
       padding: 60px 20px;
     }
     .faq-loading {
       text-align: center;
-      color: rgba(255,255,255,.25);
+      color: #aaa;
       font-size: .82rem;
       padding: 60px 20px;
     }
@@ -106,20 +108,21 @@
       margin: 48px auto 0;
       text-align: center;
       padding: 32px;
-      background: rgba(192,192,192,.04);
-      border: 1px solid rgba(192,192,192,.12);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
       border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
     }
     .faq-cta h3 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.5rem;
       font-weight: 400;
-      color: #fff;
+      color: #1a1a1a;
       margin-bottom: 10px;
     }
     .faq-cta p {
       font-size: .82rem;
-      color: rgba(255,255,255,.4);
+      color: #888;
       margin-bottom: 20px;
     }
   </style>
