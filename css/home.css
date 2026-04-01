@@ -546,7 +546,8 @@ button:focus-visible {
   border-top: 1px solid rgba(192,192,192,.12);
   border-bottom: none;
 }
-.about-strip-light .strip-item { color: #8a8580; }
+.about-strip-light .strip-item { color: #c8a96e; }
+.about-strip-light .strip-icon { opacity: .8; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
