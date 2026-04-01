@@ -56,3 +56,49 @@ window.escHtml = str =>
   `;
   document.body.appendChild(wrapper);
 })();
+
+// ─── Pływający mini-wyświetlacz portfolio (tylko strona główna) ──
+(function injectFloatingPortfolio() {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  if (page !== '' && page !== 'index.html') return;
+
+  fetch('/api/portfolio')
+    .then(r => r.json())
+    .then(items => {
+      if (!items || items.length === 0) return;
+
+      const el = document.createElement('a');
+      el.href = 'portfolio.html';
+      el.className = 'floating-portfolio';
+      el.setAttribute('aria-label', 'Zobacz portfolio');
+
+      const img = document.createElement('img');
+      img.src = '/uploads/' + items[0].filename;
+      img.alt = 'Portfolio';
+      img.loading = 'lazy';
+      el.appendChild(img);
+
+      const label = document.createElement('span');
+      label.className = 'floating-portfolio-label';
+      label.textContent = 'Portfolio';
+      el.appendChild(label);
+
+      document.body.appendChild(el);
+
+      if (items.length > 1) {
+        let idx = 0;
+        setInterval(() => {
+          idx = (idx + 1) % items.length;
+          const next = new Image();
+          next.src = '/uploads/' + items[idx].filename;
+          next.onload = () => {
+            img.style.animation = 'none';
+            img.offsetHeight; // reflow
+            img.src = next.src;
+            img.style.animation = 'fpFadeIn .5s ease';
+          };
+        }, 3500);
+      }
+    })
+    .catch(() => {});
+})();
