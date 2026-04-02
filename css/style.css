@@ -411,7 +411,10 @@ input, select, textarea { font-family: inherit; }
 }
 .booking-calendar {
   background: var(--dark-3); border-radius: var(--radius-lg);
-  border: 1px solid rgba(192,192,192,.15); padding: 28px;
+  border: 1px solid rgba(192,192,192,.15); padding: 20px;
+  transform: scale(0.75);
+  transform-origin: top center;
+  margin-bottom: -10%;
 }
 .calendar-nav {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
@@ -1141,12 +1144,13 @@ input, select, textarea { font-family: inherit; }
   background: #f5f2ef;
   border-color: rgba(0,0,0,.1);
   color: #1a1a1a;
+  color-scheme: light;
 }
 .section-light .form-group input:focus,
 .section-light .form-group select:focus,
 .section-light .form-group textarea:focus { border-color: #1a1a1a; }
 .section-light .form-group select option,
-.section-light .form-group select optgroup { background: #f5f2ef; color: #1a1a1a; }
+.section-light .form-group select optgroup { background: #f5f2ef !important; color: #1a1a1a !important; }
 .section-light .form-selected-info {
   background: rgba(0,0,0,.04);
   border-color: rgba(0,0,0,.1);
