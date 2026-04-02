@@ -289,7 +289,12 @@ app.get('/api/availability/:year/:month', (req, res) => {
       available: isSlotAvailable(dateStr, time, durationMin, requiredWorkers, reservations, blocked, vacations)
     }));
     const free = slots.filter(s => s.available).length;
-    result[dateStr] = { status: free===0?'full':free<=2?'limited':'available', slots };
+    const freeMinutes = free * 60;
+    let status;
+    if (free === 0) status = 'full';
+    else if (freeMinutes <= durationMin) status = 'limited';
+    else status = 'available';
+    result[dateStr] = { status, slots, free_minutes: freeMinutes, duration_needed: durationMin };
   }
   res.json(result);
 });

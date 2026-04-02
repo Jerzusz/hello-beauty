@@ -45,37 +45,18 @@
   <!-- ═══════════ REZERWACJA ═══════════ -->
   <section class="section section-light" id="rezerwacja">
     <div class="container">
-      <div class="booking-layout">
-        <!-- Kalendarz -->
-        <div class="booking-calendar">
-          <div class="calendar-nav">
-            <button class="cal-nav-btn" id="prevMonth">&#8249;</button>
-            <h3 class="cal-month-title" id="calMonthTitle">Ładowanie...</h3>
-            <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
-          </div>
-          <div class="calendar-legend">
-            <span class="legend-dot dot-available"></span> Wolny
-            <span class="legend-dot dot-limited"></span> Ostatnie miejsca
-            <span class="legend-dot dot-full"></span> Zajęty
-            <span class="legend-dot dot-closed"></span> Zamknięte
-          </div>
-          <div class="calendar-grid" id="calendarGrid">
-            <div class="cal-day-header">Pon</div>
-            <div class="cal-day-header">Wt</div>
-            <div class="cal-day-header">Śr</div>
-            <div class="cal-day-header">Czw</div>
-            <div class="cal-day-header">Pt</div>
-            <div class="cal-day-header">Sob</div>
-            <div class="cal-day-header">Nd</div>
-          </div>
-        </div>
+      <div class="booking-flow">
 
-        <!-- Sloty + formularz -->
-        <div class="booking-form-panel">
-
-          <!-- Krok 1 – wybór usługi -->
-          <div class="booking-step-section">
-            <h4 class="booking-step-title"><span class="step-num">1</span> Wybierz usługę</h4>
+        <!-- ═══ KROK 1 – Wybór usługi ═══ -->
+        <div class="bflow-step bflow-step--active" id="bflowStep1">
+          <div class="bflow-step-header">
+            <span class="bflow-step-num">1</span>
+            <div>
+              <h4 class="bflow-step-title">Wybierz usługę</h4>
+              <p class="bflow-step-sub">Dobierz usługę, a my pokażemy dostępne terminy.</p>
+            </div>
+          </div>
+          <div class="bflow-step-body" id="bflowBody1">
             <div class="form-group">
               <select name="service" id="serviceSelect">
                 <option value="">– wybierz usługę –</option>
@@ -89,50 +70,113 @@
             </div>
             <div class="service-info-box" id="serviceInfo" style="display:none;"></div>
           </div>
-
-          <!-- Krok 2 – godziny (pojawia się po kliknięciu dnia) -->
-          <div class="time-slots-section" id="timeSlotsSection" style="display:none;">
-            <h4 class="booking-step-title"><span class="step-num">2</span> Wybierz godzinę – <span id="selectedDateDisplay"></span></h4>
-            <div class="time-slots" id="timeSlots"></div>
-          </div>
-
-          <div class="booking-placeholder" id="bookingPlaceholder">
-            <div class="placeholder-icon">📅</div>
-            <p>Wybierz usługę, a następnie dzień z kalendarza, aby zobaczyć dostępne godziny.</p>
-          </div>
-
-          <!-- Krok 3 – dane klienta -->
-          <form class="booking-form" id="bookingForm" style="display:none;" novalidate>
-            <h4 class="booking-step-title"><span class="step-num">3</span> Uzupełnij dane</h4>
-            <div class="form-group">
-              <label>Imię *</label>
-              <input type="text" name="client_name" placeholder="Anna" required />
-            </div>
-            <div class="form-group">
-              <label>Telefon *</label>
-              <input type="tel" name="client_phone" placeholder="+48 000 000 000" required />
-            </div>
-            <div class="form-group">
-              <label>Uwagi (opcjonalnie)</label>
-              <textarea name="notes" rows="3" placeholder="Dodatkowe informacje, życzenia..."></textarea>
-            </div>
-            <div class="form-selected-info" id="formSelectedInfo"></div>
-            <div class="form-group rodo-consent-group">
-              <label class="rodo-checkbox-label">
-                <input type="checkbox" id="rodoConsent" required />
-                <span class="rodo-consent-text" id="rodoConsentText">Wyrażam zgodę na przetwarzanie moich danych osobowych (imię, telefon) przez Hello Beauty Studio w celu realizacji rezerwacji wizyty, zgodnie z <a href="polityka-prywatnosci.html" target="_blank">Polityką prywatności</a>.</span>
-              </label>
-            </div>
-            <button type="submit" class="btn btn-gold btn-full" id="submitBtn">Potwierdź rezerwację</button>
-          </form>
-
-          <div class="booking-success" id="bookingSuccess" style="display:none;">
-            <div class="success-icon">✓</div>
-            <h4>Rezerwacja złożona!</h4>
-            <p id="successMessage"></p>
-            <button class="btn btn-gold" id="newBookingBtn">Zarezerwuj kolejny termin</button>
+          <!-- Podsumowanie widoczne po złożeniu kroku -->
+          <div class="bflow-step-summary" id="bflowSummary1" style="display:none;">
+            <span id="summaryService"></span>
+            <button class="bflow-change-btn" id="changeService">Zmień</button>
           </div>
         </div>
+
+        <!-- ═══ KROK 2 – Kalendarz ═══ -->
+        <div class="bflow-step" id="bflowStep2" style="display:none;">
+          <div class="bflow-step-header">
+            <span class="bflow-step-num">2</span>
+            <div>
+              <h4 class="bflow-step-title">Wybierz dzień</h4>
+              <p class="bflow-step-sub">Zielone dni – mamy czas na Twoją usługę.</p>
+            </div>
+          </div>
+          <div class="bflow-step-body" id="bflowBody2">
+            <div class="booking-calendar">
+              <div class="calendar-nav">
+                <button class="cal-nav-btn" id="prevMonth">&#8249;</button>
+                <h3 class="cal-month-title" id="calMonthTitle">Ładowanie...</h3>
+                <button class="cal-nav-btn" id="nextMonth">&#8250;</button>
+              </div>
+              <div class="calendar-legend">
+                <span class="legend-dot dot-available"></span> Dostępny
+                <span class="legend-dot dot-limited"></span> Ostatni slot
+                <span class="legend-dot dot-full"></span> Brak miejsca
+                <span class="legend-dot dot-closed"></span> Zamknięte
+              </div>
+              <div class="calendar-grid" id="calendarGrid">
+                <div class="cal-day-header">Pon</div>
+                <div class="cal-day-header">Wt</div>
+                <div class="cal-day-header">Śr</div>
+                <div class="cal-day-header">Czw</div>
+                <div class="cal-day-header">Pt</div>
+                <div class="cal-day-header">Sob</div>
+                <div class="cal-day-header">Nd</div>
+              </div>
+            </div>
+          </div>
+          <div class="bflow-step-summary" id="bflowSummary2" style="display:none;">
+            <span id="summaryDate"></span>
+            <button class="bflow-change-btn" id="changeDate">Zmień</button>
+          </div>
+        </div>
+
+        <!-- ═══ KROK 3 – Godzina ═══ -->
+        <div class="bflow-step" id="bflowStep3" style="display:none;">
+          <div class="bflow-step-header">
+            <span class="bflow-step-num">3</span>
+            <div>
+              <h4 class="bflow-step-title">Wybierz godzinę</h4>
+              <p class="bflow-step-sub" id="selectedDateDisplay"></p>
+            </div>
+          </div>
+          <div class="bflow-step-body" id="bflowBody3">
+            <div class="time-slots" id="timeSlots"></div>
+          </div>
+          <div class="bflow-step-summary" id="bflowSummary3" style="display:none;">
+            <span id="summaryTime"></span>
+            <button class="bflow-change-btn" id="changeTime">Zmień</button>
+          </div>
+        </div>
+
+        <!-- ═══ KROK 4 – Formularz ═══ -->
+        <div class="bflow-step" id="bflowStep4" style="display:none;">
+          <div class="bflow-step-header">
+            <span class="bflow-step-num">4</span>
+            <div>
+              <h4 class="bflow-step-title">Uzupełnij dane</h4>
+              <p class="bflow-step-sub">Potrzebujemy tylko imienia i telefonu.</p>
+            </div>
+          </div>
+          <div class="bflow-step-body" id="bflowBody4">
+            <form class="booking-form" id="bookingForm" novalidate>
+              <div class="form-selected-info visible" id="formSelectedInfo"></div>
+              <div class="form-group">
+                <label>Imię *</label>
+                <input type="text" name="client_name" placeholder="Anna" required />
+              </div>
+              <div class="form-group">
+                <label>Telefon *</label>
+                <input type="tel" name="client_phone" placeholder="+48 000 000 000" required />
+              </div>
+              <div class="form-group">
+                <label>Uwagi (opcjonalnie)</label>
+                <textarea name="notes" rows="3" placeholder="Dodatkowe informacje, życzenia..."></textarea>
+              </div>
+              <div class="form-group rodo-consent-group">
+                <label class="rodo-checkbox-label">
+                  <input type="checkbox" id="rodoConsent" required />
+                  <span class="rodo-consent-text" id="rodoConsentText">Wyrażam zgodę na przetwarzanie moich danych osobowych (imię, telefon) przez Hello Beauty Studio w celu realizacji rezerwacji wizyty, zgodnie z <a href="polityka-prywatnosci.html" target="_blank">Polityką prywatności</a>.</span>
+                </label>
+              </div>
+              <button type="submit" class="btn btn-gold btn-full" id="submitBtn">Potwierdź rezerwację</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ═══ Sukces ═══ -->
+        <div class="booking-success" id="bookingSuccess" style="display:none;">
+          <div class="success-icon">✓</div>
+          <h4>Rezerwacja złożona!</h4>
+          <p id="successMessage"></p>
+          <button class="btn btn-gold" id="newBookingBtn">Zarezerwuj kolejny termin</button>
+        </div>
+
       </div>
     </div>
   </section>
@@ -196,8 +240,8 @@
   </div>
 
   <script src="js/nav.js?v=3"></script>
-  <script src="js/booking.js?v=2"></script>
-  <script src="js/calendar.js?v=2"></script>
+  <script src="js/booking.js?v=3"></script>
+  <script src="js/calendar.js?v=3"></script>
   <script src="js/rodo.js?v=2"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   calendar.js – Kalendarz terminów (service-aware)
+   calendar.js – Kalendarz terminów (krokowy flow)
    ═══════════════════════════════════════════════════ */
 
 (function () {
@@ -21,7 +21,6 @@
     'Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
     'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'
   ];
-  const monthNamesShort = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
 
   async function fetchAvailability(year, month) {
     try {
@@ -59,19 +58,36 @@
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${viewYear}-${String(viewMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      const info    = availabilityData[dateStr] || { status:'closed', slots:[] };
+      const info    = availabilityData[dateStr] || { status:'closed', slots:[], free_minutes:0, duration_needed:60 };
       const isPast  = dateStr < todayStr;
 
       const cell = document.createElement('div');
-      cell.className = `cal-day ${info.status}`;
       cell.textContent = d;
       if (dateStr === todayStr) cell.classList.add('today');
       if (isPast) cell.classList.add('past');
       cell.dataset.date = dateStr;
 
-      if (!isPast && info.status !== 'closed' && info.status !== 'full') {
+      // Kolory na podstawie wolnych minut vs czas usługi
+      if (isPast || info.status === 'closed') {
+        cell.className = `cal-day ${info.status === 'closed' ? 'closed' : ''} ${isPast ? 'past' : ''}`.trim();
+      } else {
+        const free     = info.free_minutes || 0;
+        const needed   = info.duration_needed || 60;
+        const freeSlots = (info.slots || []).filter(s => s.available).length;
+
+        if (freeSlots === 0) {
+          cell.className = 'cal-day full';
+        } else if (free <= needed) {
+          cell.className = 'cal-day limited'; // żółty – ledwo się zmieścisz
+        } else {
+          cell.className = 'cal-day available'; // zielony – dużo czasu
+        }
+
+        if (dateStr === todayStr) cell.classList.add('today');
+
         cell.addEventListener('click', () => onDayClick(cell, dateStr, info.slots));
       }
+
       grid.appendChild(cell);
     }
   }
@@ -79,89 +95,11 @@
   function onDayClick(cell, dateStr, slots) {
     document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
     cell.classList.add('selected');
-    window.selectedDate = dateStr;
-    window.selectedTime = null;
 
-    const slotsSection  = document.getElementById('timeSlotsSection');
-    const placeholder   = document.getElementById('bookingPlaceholder');
-    const bookingForm   = document.getElementById('bookingForm');
-    const bookingSuccess = document.getElementById('bookingSuccess');
-
-    const [y, m, dd] = dateStr.split('-');
-    const dayNames = ['Nd','Pon','Wt','Śr','Czw','Pt','Sob'];
-    const dayName  = dayNames[new Date(dateStr).getDay()];
-    document.getElementById('selectedDateDisplay').textContent =
-      `${dayName}, ${parseInt(dd)} ${monthNamesShort[parseInt(m)-1]} ${y}`;
-
-    const slotsContainer = document.getElementById('timeSlots');
-    if (slots.length === 0) {
-      slotsContainer.innerHTML = '<p style="color:rgba(255,255,255,.35);font-size:.82rem;padding:8px 0">Brak wolnych godzin w tym dniu.</p>';
-    } else {
-      slotsContainer.innerHTML = slots.map(s => `
-        <button class="slot-btn ${s.available ? 'slot-free' : 'slot-taken'}"
-                data-time="${s.time}"
-                ${!s.available ? 'disabled' : ''}>
-          ${s.time}
-        </button>
-      `).join('');
-      slotsContainer.querySelectorAll('.slot-free').forEach(btn => {
-        btn.addEventListener('click', () => onSlotClick(btn, btn.dataset.time, dateStr));
-      });
+    // Przekaż do booking.js
+    if (window._bookingOnDaySelected) {
+      window._bookingOnDaySelected(dateStr, slots);
     }
-
-    placeholder.style.display = 'none';
-    slotsSection.style.display = 'block';
-    bookingSuccess.style.display = 'none';
-    bookingForm.style.display = 'none';
-  }
-
-  function onSlotClick(btn, time, dateStr) {
-    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    window.selectedTime = time;
-
-    const [y, m, d] = dateStr.split('-');
-    const infoEl = document.getElementById('formSelectedInfo');
-
-    // Build info summary
-    let infoHtml = `<div class="form-info-line">✦ Termin: <strong>${parseInt(d)} ${monthNamesShort[parseInt(m)-1]} ${y}, godz. ${time}</strong></div>`;
-
-    // Append service + variant info from booking.js globals
-    if (typeof allServices !== 'undefined' && typeof selectedServiceId !== 'undefined' && selectedServiceId) {
-      const svc = allServices.find(s => s.id === selectedServiceId);
-      if (svc) {
-        infoHtml += `<div class="form-info-line">✦ Usługa: <strong>${svc.name}</strong></div>`;
-        if (typeof selectedVariantIndex !== 'undefined' && selectedVariantIndex !== null && svc.variants && svc.variants[selectedVariantIndex]) {
-          const v = svc.variants[selectedVariantIndex];
-          infoHtml += `<div class="form-info-line">✦ Wariant: <strong>${v.label}</strong> – ${v.price} zł, ${formatDur(v.duration_minutes)}</div>`;
-        } else if (!svc.variants || svc.variants.length === 0) {
-          const p1 = svc.price_from, p2 = svc.price_to;
-          const price = p1 === 0 && p2 === 0 ? 'wycena indywidualna' : p1 === p2 ? `${p1} zł` : `${p1}–${p2} zł`;
-          infoHtml += `<div class="form-info-line">✦ Cena: <strong>${price}</strong></div>`;
-        }
-        if (svc.workers && svc.workers.length > 0) {
-          infoHtml += `<div class="form-info-line">✦ Pracownik: <strong>${svc.workers.join(' + ')}</strong></div>`;
-        }
-      }
-    }
-
-    infoEl.innerHTML = infoHtml;
-    infoEl.classList.add('visible');
-
-    const bookingForm = document.getElementById('bookingForm');
-    const placeholder = document.getElementById('bookingPlaceholder');
-    placeholder.style.display = 'none';
-    bookingForm.style.display = 'block';
-    bookingForm.scrollIntoView({ behavior:'smooth', block:'nearest' });
-  }
-
-  function formatDur(minutes) {
-    if (!minutes) return '–';
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    if (h === 0) return `${m} min`;
-    if (m === 0) return `${h} h`;
-    return `${h} h ${m} min`;
   }
 
   prevBtn.addEventListener('click', () => {
@@ -196,4 +134,4 @@
   }
 
   renderAndUpdate();
-})();
+})();
