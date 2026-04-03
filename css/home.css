@@ -408,6 +408,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: color var(--transition);
 }
 .footer-privacy-link:hover { color: var(--gold); }
+.footer-powered { font-size:.7rem; color:rgba(255,255,255,.22); letter-spacing:.03em; margin-top:4px; }
+.footer-powered a { color:rgba(255,255,255,.35); text-decoration:none; transition: color var(--transition); }
+.footer-powered a:hover { color: var(--gold); }
 
 /* ═══════════ COOKIE BANNER ═══════════ */
 .cookie-banner {
